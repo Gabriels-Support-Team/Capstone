@@ -1,0 +1,32 @@
+.App {
+  text-align: center;
+  background-color: rgba(20, 20, 20, 255);
+  color: white;
+  width: 100%;
+  overflow: hidden;
+}
+
+@media (max-width: 600px) {
+  .movie-card {
+    width: 100%;
+  }
+
+  .search-bar {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .search-bar form {
+    flex-direction: column;
+  }
+}
+
+.title {
+  font-size: 70px;
+  margin: 10px;
+}
+
+.selectContainer {
+  display: flex;
+  justify-content: space-around;
+}

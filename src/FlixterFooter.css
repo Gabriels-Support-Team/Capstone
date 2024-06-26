@@ -1,0 +1,43 @@
+.siteFooter {
+  background-color: #333;
+  color: #fff;
+
+  text-align: center;
+
+  padding: 20px 0;
+}
+
+.footerContent {
+  display: flex;
+  justify-content: space-around;
+
+  padding: 20px;
+}
+
+.footerSection {
+  margin: 10px;
+}
+
+.footerSection h4 {
+  color: #f8f9fa;
+}
+
+.footerSection p,
+.footerSection a {
+  color: #ccc;
+  text-decoration: none;
+}
+
+.footerSection a:hover {
+  color: #f8f9fa;
+}
+
+.footer-bottom {
+  padding: 10px;
+  border-top: 1px solid #444;
+}
+
+.footer-bottom p {
+  margin: 0;
+  font-size: 14px;
+}

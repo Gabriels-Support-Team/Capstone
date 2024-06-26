@@ -1,0 +1,39 @@
+.select-container {
+  position: relative;
+  width: 200px;
+}
+
+select {
+  width: 100%;
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  appearance: none;
+  -moz-appearance: none; /* Removes default styling from select in Firefox */
+  -webkit-appearance: none; /* Removes default styling from select in Chrome, Safari */
+  background-color: white;
+  cursor: pointer;
+  font-size: 16px; /* Adjust font size as needed */
+}
+
+/* Custom arrow */
+.select-container::after {
+  content: "▼"; /* Unicode character for down arrow */
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  pointer-events: none; /* Ensures the arrow does not interfere with the select */
+  color: #333; /* Arrow color */
+  font-size: 12px; /* Adjust arrow size */
+}
+
+select:focus {
+  outline: none;
+  border-color: #007bff; /* Blue border for focus */
+}
+
+select {
+  margin: 10px 0;
+  padding-right: 30px; /* Make room for the arrow */
+}
