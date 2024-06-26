@@ -1,0 +1,31 @@
+.sidebar {
+  height: 100%;
+  width: 0; /* Sidebar is hidden initially */
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.sidebar.open {
+  width: 250px; /* Width of the sidebar when it's open */
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  padding: 8px 15px;
+  color: #ccc;
+}
+
+button {
+  margin: 5px;
+  padding: 10px;
+}
