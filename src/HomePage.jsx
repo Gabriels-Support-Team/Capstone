@@ -62,7 +62,7 @@ const HomePage = () => {
     <div className="App">
       <FlixterHeader likedMovies={likedMovies} watchedMovies={watchedMovies} />
       <div style={{ paddingTop: "75px" }}>
-        {/* <button
+        <button
           onClick={() => {
             doSignOut().then(() => {
               navigate("/");
@@ -70,7 +70,7 @@ const HomePage = () => {
           }}
         >
           Logout
-        </button> */}
+        </button>
         <div className="selectContainer">
           <SortBy
             className="select"
