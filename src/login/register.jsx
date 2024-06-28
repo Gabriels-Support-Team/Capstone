@@ -17,7 +17,15 @@ const Register = () => {
     e.preventDefault();
     if (!isRegistering) {
       setIsRegistering(true);
-      await doCreateUserWithEmailAndPassword(email, password);
+      userCredential = await doCreateUserWithEmailAndPassword(email, password);
+      const user = userCredential.user;
+      const response = await fetch("/users/", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({ id: user.uid, email }),
+      });
     }
   };
 
