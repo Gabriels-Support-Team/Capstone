@@ -13,21 +13,21 @@ const Register = () => {
 
   const { userLoggedIn } = useAuth();
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    if (!isRegistering) {
-      setIsRegistering(true);
-      userCredential = await doCreateUserWithEmailAndPassword(email, password);
-      const user = userCredential.user;
-      const response = await fetch("/users/", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({ id: user.uid, email }),
-      });
-    }
-  };
+  // const onSubmit = async (e) => {
+  //   e.preventDefault();
+  //   if (!isRegistering) {
+  //     setIsRegistering(true);
+  //     userCredential = await doCreateUserWithEmailAndPassword(email, password);
+  //     const user = userCredential.user;
+  //     const response = await fetch("/users/", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-type": "application/json",
+  //       },
+  //       body: JSON.stringify({ id: user.uid, email }),
+  //     });
+  //   }
+  // };
 
   return (
     <>
