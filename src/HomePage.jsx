@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import MovieList from "./MovieList";
 import SortBy from "./SortBy";
@@ -53,11 +53,10 @@ const HomePage = () => {
         "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4M2Y0ZGE0MjI0M2IxNDljZmRjM2E2YmM4MWI1OGVkNSIsInN1YiI6IjY2Njc2NGRlMDdmNzg5ZGYzMTk5ZmI2MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.TpNQ6V0IuyirQEQTh3f7XMeE7SOItQeymtCD1oCUy8Y",
     },
   };
-  useEffect(() => {
-    fetch("https://api.themoviedb.org/3/genre/movie/list?language=en", options)
-      .then((response) => response.json())
-      .then((response) => setGenres(response));
-  }, []);
+
+  fetch("https://api.themoviedb.org/3/genre/movie/list?language=en", options)
+    .then((response) => response.json())
+    .then((response) => setGenres(response));
 
   return (
     <div className="App">
