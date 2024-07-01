@@ -61,7 +61,7 @@ const HomePage = () => {
   return (
     <div className="App">
       <FlixterHeader likedMovies={likedMovies} watchedMovies={watchedMovies} />
-      <div style={{ paddingTop: "75px" }}>
+      <div style={{ paddingTop: "100px" }}>
         <div className="selectContainer">
           <SortBy
             className="select"

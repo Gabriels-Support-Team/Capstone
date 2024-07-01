@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import Sidebar from "./Sidebar";
 import { doSignOut } from "./firebase/auth";
-
 import "./FlixterHeader.css";
+import { NavLink } from "react-router-dom";
+
 function FlixterHeader({ likedMovies, watchedMovies }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const toggleSidebar = () => {
@@ -10,9 +11,13 @@ function FlixterHeader({ likedMovies, watchedMovies }) {
   };
   return (
     <header className="App-header">
-      <h1 className="title">🎥 Flixter 🎬</h1>
+      <h1>
+        <NavLink className="title" to={"/home"}>
+          🎥 Flixter 🎬
+        </NavLink>
+      </h1>
       <div>
-        <button className="toggleSidebar" onClick={toggleSidebar}>
+        {/* <button className="toggleSidebar" onClick={toggleSidebar}>
           ≡
         </button>
 
@@ -21,7 +26,7 @@ function FlixterHeader({ likedMovies, watchedMovies }) {
           isOpen={isSidebarOpen}
           toggleSidebar={toggleSidebar}
           watchedMovies={watchedMovies}
-        />
+        /> */}
         <button
           className="logOut"
           onClick={() => {
