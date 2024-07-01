@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Navigate, Link } from "react-router-dom";
 import { doSignInWithEmailAndPassword } from "../firebase/auth";
 import { useAuth } from "../contexts/authContext";
-
+import "./signupLogin.css";
 const Login = () => {
   const { userLoggedIn } = useAuth();
 
@@ -25,52 +25,50 @@ const Login = () => {
   };
 
   return (
-    <div>
-      {userLoggedIn && <Navigate to={"/home"} replace={true} />}
-      <main>
+    <div className="loginContainer">
+      <div className="center">
+        {userLoggedIn && <Navigate to={"/home"} replace={true} />}
         <div>
-          <div>
-            <h3>Welcome Back</h3>
-          </div>
-          <form onSubmit={onSubmit}>
-            <div>
-              <label>Email</label>
-              <input
-                type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-              />
-            </div>
-
-            <div>
-              <label>Password</label>
-              <input
-                type="password"
-                autoComplete="current-password"
-                required
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-              />
-            </div>
-
-            <button type="submit" disabled={isSigningIn}>
-              {isSigningIn ? "Signing In..." : "Sign In"}
-            </button>
-            {errorMessage && (
-              <span className="text-red-600 font-bold">{errorMessage}</span>
-            )}
-          </form>
-          <p>
-            Don't have an account? <Link to={"/register"}>Sign up</Link>
-          </p>
+          <h1>Welcome Back</h1>
         </div>
-      </main>
+        <form onSubmit={onSubmit}>
+          <div className="txtField">
+            <input
+              type="text"
+              autoComplete="email"
+              required
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+            />
+            <span></span>
+            <label>Email</label>
+          </div>
+
+          <div className="txtField">
+            <input
+              type="password"
+              autoComplete="current-password"
+              required
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+            />
+            <span></span>
+            <label>Password</label>
+          </div>
+
+          <button className="loginButton" type="submit" disabled={isSigningIn}>
+            {isSigningIn ? "Signing In..." : "Sign In"}
+          </button>
+          {errorMessage && <span className="error">{errorMessage}</span>}
+        </form>
+        <p className="signupLink">
+          <Link to={"/register"}>Sign up</Link>
+        </p>
+      </div>
     </div>
   );
 };
