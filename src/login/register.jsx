@@ -14,23 +14,6 @@ const Register = () => {
 
   const { userLoggedIn } = useAuth();
 
-<<<<<<< Updated upstream
-  // const onSubmit = async (e) => {
-  //   e.preventDefault();
-  //   if (!isRegistering) {
-  //     setIsRegistering(true);
-  //     userCredential = await doCreateUserWithEmailAndPassword(email, password);
-  //     const user = userCredential.user;
-  //     const response = await fetch("/users/", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-type": "application/json",
-  //       },
-  //       body: JSON.stringify({ id: user.uid, email }),
-  //     });
-  //   }
-  // };
-=======
   const onSubmit = async (e) => {
     e.preventDefault();
     if (!isRegistering && password === confirmPassword) {
@@ -58,73 +41,78 @@ const Register = () => {
       }
     }
   };
->>>>>>> Stashed changes
 
   return (
-    <div className="loginContainer">
-      {userLoggedIn && <Navigate to={"/home"} replace={true} />}
-      <div className="center">
-        <div>
-          <h1>Create a New Account</h1>
+    <div>
+      <header className="App-header">
+        <h1 className="title">🎥 Flixter 🎬</h1>
+      </header>
+
+      <div className="loginContainer">
+        {userLoggedIn && <Navigate to={"/home"} replace={true} />}
+        <div className="center">
+          <div>
+            <h1>Create a New Account</h1>
+          </div>
+          <form onSubmit={onSubmit}>
+            <div className="txtField">
+              <input
+                type="text"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+              />
+              <span></span>
+
+              <label>Email</label>
+            </div>
+
+            <div className="txtField">
+              <input
+                disabled={isRegistering}
+                type="password"
+                autoComplete="new-password"
+                required
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+              />
+              <span></span>
+              <label>Password</label>
+            </div>
+
+            <div className="txtField">
+              <input
+                disabled={isRegistering}
+                type="password"
+                autoComplete="off"
+                required
+                value={confirmPassword}
+                onChange={(e) => {
+                  setconfirmPassword(e.target.value);
+                }}
+              />
+              <span></span>
+              <label>Confirm Password</label>
+            </div>
+
+            <button
+              className="loginButton"
+              type="submit"
+              disabled={isRegistering}
+            >
+              {isRegistering ? "Signing Up..." : "Sign Up"}
+            </button>
+            <div className="signupLink">
+              Already have an account? {"   "}
+              <Link to={"/"}>Log In</Link>
+            </div>
+          </form>
         </div>
-        <form onSubmit={onSubmit}>
-          <div className="txtField">
-            <input
-              type="text"
-              autoComplete="email"
-              required
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-            />
-            <span></span>
-
-            <label>Email</label>
-          </div>
-
-          <div className="txtField">
-            <input
-              disabled={isRegistering}
-              type="password"
-              autoComplete="new-password"
-              required
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-            />
-            <span></span>
-            <label>Password</label>
-          </div>
-
-          <div className="txtField">
-            <input
-              disabled={isRegistering}
-              type="password"
-              autoComplete="off"
-              required
-              value={confirmPassword}
-              onChange={(e) => {
-                setconfirmPassword(e.target.value);
-              }}
-            />
-            <span></span>
-            <label>Confirm Password</label>
-          </div>
-
-          <button
-            className="loginButton"
-            type="submit"
-            disabled={isRegistering}
-          >
-            {isRegistering ? "Signing Up..." : "Sign Up"}
-          </button>
-          <div className="signupLink">
-            Already have an account? {"   "}
-            <Link to={"/"}>Log In</Link>
-          </div>
-        </form>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Sidebar from "./Sidebar";
+import { doSignOut } from "./firebase/auth";
 
 import "./FlixterHeader.css";
 function FlixterHeader({ likedMovies, watchedMovies }) {
@@ -10,15 +11,28 @@ function FlixterHeader({ likedMovies, watchedMovies }) {
   return (
     <header className="App-header">
       <h1 className="title">🎥 Flixter 🎬</h1>
-      <button className="toggleSidebar" onClick={toggleSidebar}>
-        ≡
-      </button>
-      <Sidebar
-        likedMovies={likedMovies}
-        isOpen={isSidebarOpen}
-        toggleSidebar={toggleSidebar}
-        watchedMovies={watchedMovies}
-      />
+      <div>
+        <button className="toggleSidebar" onClick={toggleSidebar}>
+          ≡
+        </button>
+
+        <Sidebar
+          likedMovies={likedMovies}
+          isOpen={isSidebarOpen}
+          toggleSidebar={toggleSidebar}
+          watchedMovies={watchedMovies}
+        />
+        <button
+          className="logOut"
+          onClick={() => {
+            doSignOut().then(() => {
+              navigate("/");
+            });
+          }}
+        >
+          Logout
+        </button>
+      </div>
     </header>
   );
 }
