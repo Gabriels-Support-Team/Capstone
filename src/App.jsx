@@ -6,6 +6,12 @@ import HomePage from "./HomePage";
 import Register from "./login/register.jsx";
 import { AuthProvider } from "./contexts/authContext";
 import "./App.css";
+import ProtectedRoute from "./ProtectedRoute.jsx";
+import Recommendations from "./Recommendations";
+import Bookmarks from "./Bookmarks";
+import Friends from "./Friends";
+import MyRankings from "./MyRankings.jsx";
+
 function App() {
   return (
     <AuthProvider>
@@ -14,7 +20,46 @@ function App() {
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/Home" element={<HomePage />} />
+            <Route
+              path="/Home"
+              element={
+                <ProtectedRoute>
+                  <HomePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/recommendations"
+              element={
+                <ProtectedRoute>
+                  <Recommendations></Recommendations>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/Bookmarks"
+              element={
+                <ProtectedRoute>
+                  <Bookmarks></Bookmarks>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/Friends"
+              element={
+                <ProtectedRoute>
+                  <Friends></Friends>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/myRankings"
+              element={
+                <ProtectedRoute>
+                  <MyRankings></MyRankings>
+                </ProtectedRoute>
+              }
+            />
             {/* <Route component={NotFound} /> */}
           </Routes>
         </div>

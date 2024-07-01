@@ -3,12 +3,13 @@
   flex-direction: column;
   margin: "10px";
   padding: "10px";
-  width: 220px;
+  width: 200px;
   margin: 30px;
   background-color: rgba(24, 24, 24, 255);
   border-radius: 5px;
   /* border-left: 3px  solid red; */
   border-bottom: 5px solid red;
+  align-items: center;
 }
 @media (max-width: 700px) {
   .movieCard {
@@ -47,4 +48,18 @@
 .checkBoxContainer {
   display: flex;
   align-items: center;
+}
+
+.ratingCircle {
+  display: inline-block;
+  width: 50px;
+  height: 57px;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2em;
+  border: 2px solid;
+  box-sizing: border-box;
+  margin-top: 10px;
 }

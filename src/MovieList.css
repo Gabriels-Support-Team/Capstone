@@ -1,52 +1,53 @@
-.movieListContainerActive{
-    display:flex;
-    flex-wrap: wrap; /* Enable wrapping of items */
-    justify-content: center; /* Align items to the start of the container */
-    margin-left: 30px;
-    margin-right: 30px;
-
+.movieListContainerActive {
+  display: flex;
+  flex-wrap: wrap; /* Enable wrapping of items */
+  justify-content: center; /* Align items to the start of the container */
+  margin-left: 30px;
+  margin-right: 30px;
 }
-.movieListContainerInactive{
-    display:none;
-}
-
-.searchInactive{
-    display:none;
-}
-.searchActive{
-    display:flex;
-    justify-content: center;
-    height:60px;
-    margin:20px;
-}
-.searchActive input{
-    width:300px;
-    border-width:4px;
+.movieListContainerInactive {
+  display: none;
 }
 
-
-.toggleButtons{
-    display:flex;
-    justify-content:space-evenly;
-    
+.searchInactive {
+  display: none;
 }
-.toggleButtons button{
-    width:45%;
-    margin-left:50px;
-    margin-right:50px;
-    margin-top: 0px;
-    margin-bottom: 1px;
-    padding:20px;
-    background-color: rgba(24,24,24,255);
-    border-radius: 310px;
-
+.searchActive {
+  display: flex;
+  justify-content: center;
+  height: 60px;
+  margin: 20px;
 }
-.toggleButtons button:hover{
-    transform: scale(1.1) ;
-}
-.loadMoreButton{
-    width:800px;
-    margin:20px;
-    height:60px;
+.searchActive input {
+  width: 300px;
+  border-width: 4px;
 }
 
+.toggleButtons {
+  display: flex;
+  justify-content: space-evenly;
+}
+.toggleButtons button {
+  width: 45%;
+  margin-left: 50px;
+  margin-right: 50px;
+  margin-top: 0px;
+  margin-bottom: 1px;
+  padding: 20px;
+  background-color: rgba(24, 24, 24, 255);
+  border-radius: 310px;
+}
+.toggleButtons button:hover {
+  transform: scale(1.1);
+}
+.loadMoreButton {
+  width: 800px;
+  margin: 20px;
+  height: 60px;
+}
+
+.recommendationsBanner {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 60px 10px 60px;
+}

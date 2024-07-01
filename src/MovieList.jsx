@@ -4,7 +4,7 @@ import "./MovieList.css";
 import MovieCard from "./MovieCard";
 import CreateModal from "./Modal";
 import IncludeGenre from "./IncludeGenre";
-//component that holds all the movie cards
+import { useNavigate } from "react-router-dom";
 function MovieList({
   sortSelection,
   setFetchURL,
@@ -17,7 +17,7 @@ function MovieList({
   toggleWatched,
   watchedMovies,
 }) {
-  //initialize state variables
+  const navigate = useNavigate();
   const [data, setData] = useState({ results: [] });
 
   const [searchQuery, setSearchQuery] = useState();
@@ -53,7 +53,7 @@ function MovieList({
       .catch((error) => console.error("Error fetching data:", error));
   }, [page, fetchURL, sortSelection, genreSelection]);
   //load API data into movieCard containers
-  const divs = data?.results?.map((movie, index) => (
+  const divs = data?.results?.slice(0, 6).map((movie, index) => (
     <MovieCard
       key={movie.id}
       movieImage={`https://image.tmdb.org/t/p/w342${movie?.poster_path}`}
@@ -132,15 +132,67 @@ function MovieList({
           Search🔍
         </button>
       </div>
-      <div
-        className={
-          showSearch ? "movieListContainerInactive" : "movieListContainerActive"
-        }
-      >
-        {divs}
-        <button onClick={() => setPage(page + 1)} className="loadMoreButton">
-          Load More
-        </button>
+      <div className="reccomendations">
+        <div className="recommendationsBanner">
+          <h1>Personalized Recommendations</h1>
+          <button onClick={() => navigate("../recommendations")}>
+            Show all
+          </button>
+        </div>
+        <div
+          className={
+            showSearch
+              ? "movieListContainerInactive"
+              : "movieListContainerActive"
+          }
+        >
+          {divs}
+        </div>
+      </div>
+      <div className="My dynamic rankings">
+        <div className="recommendationsBanner">
+          <h1>My Rankings</h1>
+          <button onClick={() => navigate("../myRankings")}>Show all</button>
+        </div>
+        <div
+          className={
+            showSearch
+              ? "movieListContainerInactive"
+              : "movieListContainerActive"
+          }
+        >
+          {divs}
+        </div>
+      </div>
+      <div className="bookmarks">
+        <div className="recommendationsBanner">
+          <h1>Bookmarked Movies</h1>
+          <button onClick={() => navigate("../Bookmarks")}>Show all</button>
+        </div>
+        <div
+          className={
+            showSearch
+              ? "movieListContainerInactive"
+              : "movieListContainerActive"
+          }
+        >
+          {divs}
+        </div>
+      </div>
+      <div className="Friends">
+        <div className="recommendationsBanner">
+          <h1>Friends' Movies</h1>
+          <button onClick={() => navigate("../Friends")}>Show all</button>
+        </div>
+        <div
+          className={
+            showSearch
+              ? "movieListContainerInactive"
+              : "movieListContainerActive"
+          }
+        >
+          {divs}
+        </div>
       </div>
     </div>
   );

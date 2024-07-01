@@ -5,7 +5,6 @@ import SortBy from "./SortBy";
 import IncludeGenre from "./IncludeGenre";
 import FlixterHeader from "./FlixterHeader";
 import FlixterFooter from "./FlixterFooter";
-import { doSignOut } from "./firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 const HomePage = () => {
   const navigate = useNavigate();
@@ -63,15 +62,6 @@ const HomePage = () => {
     <div className="App">
       <FlixterHeader likedMovies={likedMovies} watchedMovies={watchedMovies} />
       <div style={{ paddingTop: "75px" }}>
-        <button
-          onClick={() => {
-            doSignOut().then(() => {
-              navigate("/");
-            });
-          }}
-        >
-          Logout
-        </button>
         <div className="selectContainer">
           <SortBy
             className="select"
