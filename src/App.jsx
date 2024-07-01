@@ -5,12 +5,12 @@ import Login from "./login/login.jsx";
 import HomePage from "./HomePage";
 import Register from "./login/register.jsx";
 import { AuthProvider } from "./contexts/authContext";
-
+import "./App.css";
 function App() {
   return (
     <AuthProvider>
       <Router>
-        <div>
+        <div className="routerDiv">
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/register" element={<Register />} />
