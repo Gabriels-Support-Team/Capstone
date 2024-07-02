@@ -33,27 +33,34 @@ function MyRankings({ movies }) {
   }, [page]);
 
   return (
-    <div>
+    <div className="rankingsPage">
       <FlixterHeader></FlixterHeader>
+      <div className="rankingsTitle">WATCHED MOVIES</div>
+      <div className="sub">Explore your ratings for movies you've seen</div>
+
       <div id="container">
-        {data?.results?.slice(0, 20).map((movie, index) => (
-          <div className="row">
-            <img
-              className="leaderboardImage"
-              src={`https://image.tmdb.org/t/p/w342${movie?.poster_path}`}
-            ></img>
-            <div className="name">{movie.original_title}</div>
-            <div
-              style={{
-                borderColor: getRatingColor(movie?.vote_average),
-                color: getRatingColor(movie?.vote_average),
-              }}
-              className="score"
-            >
-              {movie.vote_average.toFixed(2)}
+        {data?.results
+          ?.slice(0, 20)
+          .sort((a, b) => b.vote_average - a.vote_average)
+          .map((movie, index) => (
+            <div className="row">
+              <h1 className="rank">{index + 1}</h1>
+              <img
+                className="leaderboardImage"
+                src={`https://image.tmdb.org/t/p/w342${movie?.poster_path}`}
+              ></img>
+              <div className="name">{movie.original_title}</div>
+              <div
+                style={{
+                  borderColor: getRatingColor(movie?.vote_average),
+                  color: getRatingColor(movie?.vote_average),
+                }}
+                className="score"
+              >
+                {movie.vote_average.toFixed(2)}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );

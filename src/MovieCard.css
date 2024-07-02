@@ -8,7 +8,7 @@
   background-color: rgba(24, 24, 24, 255);
   border-radius: 5px;
   /* border-left: 3px  solid red; */
-  border-bottom: 5px solid red;
+  border-bottom: 5px solid #c79c40;
   align-items: center;
 }
 @media (max-width: 700px) {
@@ -34,7 +34,7 @@
 }
 
 .favorite {
-  color: red;
+  color: #c79c40;
   padding: 10px;
 }
 

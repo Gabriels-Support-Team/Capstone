@@ -1,9 +1,8 @@
 .App-header {
-  background-color: rgba(24, 24, 24, 255);
+  background-color: #f8c873;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
   color: white;
   padding: 0px;
   position: fixed; /* Fixed positioning */
@@ -12,15 +11,25 @@
   width: 100%; /* Full width */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   z-index: 1000;
+  overflow: hidden;
+  height: 100px;
 }
 
 .title {
   font-size: 40px;
-  color: rgba(228, 9, 18, 255);
+  color: #c79c40;
   text-decoration: none;
+  margin-right: auto;
 }
 .toggleSidebar {
   width: 60px;
   background-color: rgba(24, 24, 24, 255);
   border-radius: 310px;
+}
+.logo {
+  width: 250px;
+  padding-top: 10px;
+}
+.logOutdiv {
+  margin-left: auto;
 }

@@ -30,3 +30,6 @@
   display: flex;
   justify-content: space-around;
 }
+.routerDiv {
+  font-family: "Impact";
+}
