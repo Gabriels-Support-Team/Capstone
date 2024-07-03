@@ -5,6 +5,7 @@ import MovieCard from "./MovieCard";
 import CreateModal from "./Modal";
 import IncludeGenre from "./IncludeGenre";
 import { useNavigate } from "react-router-dom";
+import FriendCard from "./FriendCard";
 function MovieList({
   sortSelection,
   setFetchURL,
@@ -135,9 +136,12 @@ function MovieList({
       <div className="reccomendations">
         <div className="recommendationsBanner">
           <h1>Personalized Recommendations</h1>
-          <button onClick={() => navigate("../recommendations")}>
+          <p
+            className="showAll"
+            onClick={() => navigate("../recommendations", { state: { data } })}
+          >
             Show all
-          </button>
+          </p>
         </div>
         <div
           className={
@@ -152,7 +156,9 @@ function MovieList({
       <div className="My dynamic rankings">
         <div className="recommendationsBanner">
           <h1>My Rankings</h1>
-          <button onClick={() => navigate("../myRankings")}>Show all</button>
+          <p className="showAll" onClick={() => navigate("../myRankings")}>
+            Show all
+          </p>
         </div>
         <div
           className={
@@ -167,7 +173,9 @@ function MovieList({
       <div className="bookmarks">
         <div className="recommendationsBanner">
           <h1>Bookmarked Movies</h1>
-          <button onClick={() => navigate("../Bookmarks")}>Show all</button>
+          <p className="showAll" onClick={() => navigate("../Bookmarks")}>
+            Show all
+          </p>
         </div>
         <div
           className={
@@ -181,8 +189,10 @@ function MovieList({
       </div>
       <div className="Friends">
         <div className="recommendationsBanner">
-          <h1>Friends' Movies</h1>
-          <button onClick={() => navigate("../Friends")}>Show all</button>
+          <h1>Friends</h1>
+          <p className="showAll" onClick={() => navigate("../Friends")}>
+            Show all
+          </p>
         </div>
         <div
           className={
@@ -191,7 +201,11 @@ function MovieList({
               : "movieListContainerActive"
           }
         >
-          {divs}
+          <FriendCard />
+          <FriendCard />
+
+          <FriendCard />
+          <FriendCard />
         </div>
       </div>
     </div>

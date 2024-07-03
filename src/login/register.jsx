@@ -45,7 +45,7 @@ const Register = () => {
   return (
     <div>
       <header className="App-header">
-        <h1 className="title">🎥 Flixter 🎬</h1>
+        <h1 className="title">🎥 Moveas 🎬</h1>
       </header>
 
       <div className="loginContainer">

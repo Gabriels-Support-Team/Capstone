@@ -1,3 +1,38 @@
 h1 {
   color: white;
 }
+.recommendationsContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.highlightedMoviePic {
+  width: 50%;
+  margin-bottom: 20px;
+}
+.recTitle {
+  padding-top: 100px;
+  text-align: center;
+  font-size: 60px;
+}
+.highlightedMovie {
+  display: flex;
+  justify-content: space-around;
+}
+.highlightedMovieText {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  align-items: flex-start;
+  justify-content: space-evenly;
+  font-size: 50px;
+  width: 40%;
+}
+.overview {
+  font-size: 20px;
+  text-align: center;
+}
+.releaseDate {
+  font-size: 30px;
+}

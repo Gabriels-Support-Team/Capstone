@@ -1,6 +1,24 @@
 import React from "react";
 // import "./Bookmarks.css";
+import FlixterHeader from "./FlixterHeader";
+import FriendCard from "./FriendCard";
+import "./Friends.css";
 function Friends() {
-  return <h1>Friends</h1>;
+  return (
+    <div className="rankingsPage">
+      <FlixterHeader></FlixterHeader>
+      <div className="rankingsTitle">Friends</div>
+      <div className="sub">Movie night? Get joint Recommendations</div>
+      <div className="friendsContainer">
+        <FriendCard></FriendCard>
+        <FriendCard></FriendCard>
+        <FriendCard></FriendCard>
+        <FriendCard></FriendCard>
+        <FriendCard></FriendCard>
+        <FriendCard></FriendCard>
+        <FriendCard></FriendCard>
+      </div>
+    </div>
+  );
 }
 export default Friends;
