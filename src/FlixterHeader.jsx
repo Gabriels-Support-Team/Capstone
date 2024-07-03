@@ -3,7 +3,7 @@ import Sidebar from "./Sidebar";
 import { doSignOut } from "./firebase/auth";
 import "./FlixterHeader.css";
 import { NavLink } from "react-router-dom";
-import logo from "./logo.png"; // Adjust the path to where your image is stored
+import logo from "./logo.png";
 
 function FlixterHeader({ likedMovies, watchedMovies }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -16,8 +16,7 @@ function FlixterHeader({ likedMovies, watchedMovies }) {
         <img className="logo" src={logo} alt="" />
       </NavLink>
 
-      <div className="logOutdiv">
-        {/* <button className="toggleSidebar" onClick={toggleSidebar}>
+      {/* <button className="toggleSidebar" onClick={toggleSidebar}>
           ≡
         </button>
 
@@ -27,16 +26,15 @@ function FlixterHeader({ likedMovies, watchedMovies }) {
           toggleSidebar={toggleSidebar}
           watchedMovies={watchedMovies}
         /> */}
-        <button
-          className="logOut"
-          onClick={() => {
-            doSignOut().then(() => {
-              navigate("/");
-            });
-          }}
-        >
-          Logout
-        </button>
+      <div
+        className="logOut"
+        onClick={() => {
+          doSignOut().then(() => {
+            navigate("/");
+          });
+        }}
+      >
+        Logout
       </div>
     </header>
   );

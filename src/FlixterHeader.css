@@ -30,6 +30,11 @@
   width: 250px;
   padding-top: 10px;
 }
-.logOutdiv {
-  margin-left: auto;
+.logOut {
+  margin: 3%;
+  color: rgba(24, 24, 24, 255);
+}
+
+.logOut:hover {
+  text-decoration: underline;
 }

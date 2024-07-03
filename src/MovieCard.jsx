@@ -19,7 +19,7 @@ function MovieCard({
     toggleWatched(movieTitle);
   };
 
-  const isFavorite = !!likedMovies[movieTitle];
+  // const isFavorite = !!likedMovies[movieTitle];
   const ratingColor = getRatingColor(movieRating);
   return (
     <div className="movieCard" onClick={openModal}>
@@ -30,38 +30,6 @@ function MovieCard({
         style={{ borderColor: ratingColor, color: ratingColor }}
       >
         {movieRating.toFixed(2)}
-      </div>
-      <div className="toggleContainer">
-        <div className="checkBoxContainer">
-          <input
-            className="checkBox"
-            type="checkbox"
-            checked={watchedMovies.includes(movieTitle)}
-            onChange={toggleWathchedInternal}
-            onClick={(event) => event.stopPropagation()}
-            id={`watched-${movieTitle}`}
-          />
-          <label htmlFor={`watched-${movieTitle}`}>Watched</label>
-        </div>
-        {isFavorite ? (
-          <FaHeart
-            className="favorite"
-            size="2em"
-            onClick={(event) => {
-              event.stopPropagation();
-              toggleLiked(movieTitle);
-            }}
-          />
-        ) : (
-          <CiHeart
-            className="favorite"
-            size="2em"
-            onClick={(event) => {
-              event.stopPropagation();
-              toggleLiked(movieTitle);
-            }}
-          />
-        )}
       </div>
     </div>
   );

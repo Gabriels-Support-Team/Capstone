@@ -36,9 +36,9 @@ function MyRankings({ movies }) {
     <div className="rankingsPage">
       <FlixterHeader></FlixterHeader>
       <div className="rankingsTitle">WATCHED MOVIES</div>
-      <div className="sub">Explore your ratings for movies you've seen</div>
+      <div className="sub">Explore personal ratings for movies you've seen</div>
 
-      <div id="container">
+      <div id="rankingscontainer">
         {data?.results
           ?.slice(0, 20)
           .sort((a, b) => b.vote_average - a.vote_average)

@@ -49,5 +49,16 @@
 .recommendationsBanner {
   display: flex;
   justify-content: space-between;
-  margin: 20px 60px 10px 60px;
+  margin: 50px 8% 0px 8%;
+  align-items: center;
+}
+.showAll {
+  font-size: 25px;
+  color: grey;
+  font-family: arial;
+  margin-bottom: 0;
+}
+
+.showAll:hover {
+  text-decoration: underline;
 }

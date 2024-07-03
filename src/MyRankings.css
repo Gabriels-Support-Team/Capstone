@@ -13,7 +13,7 @@
   text-align: center;
   color: white;
 }
-#container {
+#rankingscontainer {
   width: 100%;
   height: auto;
   color: white;
@@ -31,7 +31,7 @@
   border: 3px solid #ffe56f;
   margin: 20px;
   font-size: 30px;
-  background-color: #c7983c;
+  background-color: rgba(24, 24, 24, 255);
   border-radius: 2px;
   overflow: hidden;
 }
