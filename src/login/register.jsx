@@ -3,6 +3,8 @@ import { Navigate, Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/authContext/index";
 import { doCreateUserWithEmailAndPassword } from "../firebase/auth";
 import "./signupLogin.css";
+import logo from "../logo.png";
+import { NavLink } from "react-router-dom";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -45,7 +47,9 @@ const Register = () => {
   return (
     <div>
       <header className="App-header">
-        <h1 className="title">🎥 Moveas 🎬</h1>
+        <NavLink className="title" to={"/home"}>
+          <img className="logo" src={logo} alt="" />
+        </NavLink>
       </header>
 
       <div className="loginContainer">

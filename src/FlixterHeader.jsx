@@ -15,17 +15,21 @@ function FlixterHeader({ likedMovies, watchedMovies }) {
       <NavLink className="title" to={"/home"}>
         <img className="logo" src={logo} alt="" />
       </NavLink>
+      <div className="links">
+        <NavLink className="navLink" to={"/myRankings"}>
+          Watched Movies
+        </NavLink>
+        <NavLink className="navLink" to={"/recommendations"}>
+          Recommendations
+        </NavLink>
+        <NavLink className="navLink" to={"/Friends"}>
+          Friends
+        </NavLink>
+        <NavLink className="navLink" to={"/profile"}>
+          Profile
+        </NavLink>
+      </div>
 
-      {/* <button className="toggleSidebar" onClick={toggleSidebar}>
-          ≡
-        </button>
-
-        <Sidebar
-          likedMovies={likedMovies}
-          isOpen={isSidebarOpen}
-          toggleSidebar={toggleSidebar}
-          watchedMovies={watchedMovies}
-        /> */}
       <div
         className="logOut"
         onClick={() => {

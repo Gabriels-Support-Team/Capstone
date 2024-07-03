@@ -11,7 +11,8 @@ import Recommendations from "./Recommendations";
 import Bookmarks from "./Bookmarks";
 import Friends from "./Friends";
 import MyRankings from "./MyRankings.jsx";
-
+import Profile from "./Profile.jsx";
+import MovieLogger from "./MovieLogger.jsx";
 function App() {
   return (
     <AuthProvider>
@@ -60,7 +61,22 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            {/* <Route component={NotFound} /> */}
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile></Profile>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/MovieLogger"
+              element={
+                <ProtectedRoute>
+                  <MovieLogger></MovieLogger>
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </div>
       </Router>

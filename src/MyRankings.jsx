@@ -35,7 +35,7 @@ function MyRankings({ movies }) {
   return (
     <div className="rankingsPage">
       <FlixterHeader></FlixterHeader>
-      <div className="rankingsTitle">WATCHED MOVIES</div>
+      <div className="rankingsTitle">Watched Movies</div>
       <div className="sub">Explore personal ratings for movies you've seen</div>
 
       <div id="rankingscontainer">
