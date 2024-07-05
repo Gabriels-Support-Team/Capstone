@@ -27,7 +27,7 @@ body {
 .center h1 {
   text-align: center;
   padding: 30px;
-  border-bottom: 2px solid red;
+  border-bottom: 2px solid #ffe56f;
   color: white;
 }
 
@@ -93,7 +93,7 @@ input:focus + label {
 }
 
 .signupLink a {
-  color: red;
+  color: #ffe56f;
   text-decoration: none;
 }
 
@@ -108,13 +108,13 @@ input:focus + label {
   left: 0;
   width: 0px;
   height: 2px;
-  background: red;
+  background: #ffe56f;
   transition: 0.5s;
 }
 .txtField input:focus ~ label,
 .txtField input:valid ~ label {
   top: -5px;
-  color: red;
+  color: #ffe56f;
 }
 
 .txtField input:focus ~ span::before,

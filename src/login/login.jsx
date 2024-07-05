@@ -3,6 +3,9 @@ import { Navigate, Link } from "react-router-dom";
 import { doSignInWithEmailAndPassword } from "../firebase/auth";
 import { useAuth } from "../contexts/authContext";
 import "./signupLogin.css";
+import logo from "../logo.png";
+import { NavLink } from "react-router-dom";
+
 const Login = () => {
   const { userLoggedIn } = useAuth();
 
@@ -27,7 +30,9 @@ const Login = () => {
   return (
     <div>
       <header className="App-header">
-        <h1 className="title">🎥 Moveas 🎬</h1>
+        <NavLink className="title" to={"/home"}>
+          <img className="logo" src={logo} alt="" />
+        </NavLink>
       </header>
 
       <div className="loginContainer">
