@@ -16,6 +16,19 @@ datasource db {
 model User{
   id Int @id @default(autoincrement())
   email String
+  movies UserMovies[]
 }
-
+model Movie {
+  movieId  Int  @id
+  title    String
+  genres   String
+  users    UserMovies[]
+}
+model UserMovies {
+  user   User   @relation(fields: [userId], references: [id])
+  userId Int
+  movie  Movie  @relation(fields: [movieId], references: [movieId])
+  movieId Int
+  @@id([userId, movieId])
+}
 

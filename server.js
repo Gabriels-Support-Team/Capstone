@@ -6,6 +6,7 @@ app.use(cors());
 
 const PORT = 3000;
 import userRoutes from "./Routes/users.js";
+import movieRoutes from "./Routes/movies.js";
 
 app.listen(PORT, () => {
   console.log("server is running");
@@ -16,3 +17,5 @@ app.get("/", (req, res) => {
 });
 
 app.use("/users", userRoutes);
+
+app.use("/movies", movieRoutes);

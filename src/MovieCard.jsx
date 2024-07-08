@@ -24,7 +24,6 @@ function MovieCard({
   return (
     <div className="movieCard" onClick={openModal}>
       <img className="movieImage" src={movieImage} alt={movieTitle}></img>
-      {/* <p className="movieTitle">{movieTitle}</p> */}
       <div
         className="ratingCircle"
         style={{ borderColor: ratingColor, color: ratingColor }}

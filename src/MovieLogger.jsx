@@ -1,95 +1,64 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FlixterHeader from "./FlixterHeader";
 import "./MovieLogger.css";
 function MovieLogger() {
   const [movies, setMovies] = useState([]);
-  const [currentMovie, setCurrentMovie] = useState({ name: "", rating: "" });
-  const [comparisonIndex, setComparisonIndex] = useState(0);
-  const [isComparing, setIsComparing] = useState(false);
-
-  const handleMovieInput = (e) => {
-    setCurrentMovie({ ...currentMovie, name: e.target.value });
+  const [searchQuery, setSearchQuery] = useState("");
+  const [movieSelectedFlag, setMovieSelectedFlag] = useState(false);
+  const [movieToLog, setMovieToLog] = useState("");
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
   };
-
-  const handleRatingSelect = (e) => {
-    setCurrentMovie({ ...currentMovie, rating: e.target.value });
-  };
-
-  const startComparison = () => {
-    if (currentMovie.name && currentMovie.rating) {
-      setIsComparing(true);
-      setComparisonIndex(0);
-    } else {
-      alert("Please enter movie details and select a rating.");
-    }
-  };
-
-  const handleComparisonResult = (isBetter) => {
-    if (comparisonIndex >= movies.length || movies.length === 0) {
-      setMovies([...movies, currentMovie]);
-      resetLogging();
-      return;
-    }
-
-    const nextIndex = isBetter ? comparisonIndex + 1 : comparisonIndex;
-    if (isBetter || comparisonIndex === movies.length - 1) {
-      const newMovies = [...movies];
-      newMovies.splice(nextIndex, 0, currentMovie);
-      setMovies(newMovies);
-      resetLogging();
-    } else {
-      setComparisonIndex(nextIndex);
-    }
-  };
-
-  const resetLogging = () => {
-    setCurrentMovie({ name: "", rating: "" });
-    setIsComparing(false);
-    setComparisonIndex(0);
+  const submitSearch = (query) => {
+    const encodedQuery = encodeURIComponent(query);
+    fetch(`http://localhost:3000/movies/search?query=${encodedQuery}`)
+      .then((response) => response.json())
+      .then((data) => setMovies(data))
+      .catch((error) => console.error("Error fetching movies:", error));
   };
 
   return (
     <div>
       <FlixterHeader />
-      <div className="loggingContainer">
-        <h1>Movie Logger</h1>
-        {!isComparing ? (
-          <div>
-            <input
-              type="text"
-              placeholder="Enter movie name"
-              onChange={handleMovieInput}
-            />
-            <select onChange={handleRatingSelect} defaultValue="">
-              <option value="" disabled>
-                Select rating
-              </option>
-              <option value="good">Good</option>
-              <option value="ok">Ok</option>
-              <option value="bad">Bad</option>
-            </select>
-            <button onClick={startComparison}>Start Comparison</button>
+      <div className="searchContainer">
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          placeholder="Search"
+          className="searchBar"
+        />
+        <button
+          onClick={() => {
+            submitSearch(searchQuery);
+            setMovieSelectedFlag(false);
+          }}
+          className="submitSearchButton"
+        >
+          Search🔍
+        </button>
+      </div>
+      <div
+        className={
+          movieSelectedFlag ? "moviesListInactive" : "moviesListActive"
+        }
+      >
+        {movies.map((movie) => (
+          <div
+            onClick={() => {
+              setMovieSelectedFlag(true);
+              setMovieToLog(movie.movieId);
+            }}
+            className="movieSelection"
+            key={movie.movieId}
+          >
+            {movie.title}
+            <br></br>
+            <br></br>
+
+            {movie.genres}
           </div>
-        ) : (
-          <div>
-            {isComparing &&
-              movies.length > 0 &&
-              comparisonIndex < movies.length && (
-                <div>
-                  <p>
-                    Is {currentMovie.name} better than{" "}
-                    {movies[comparisonIndex].name}?
-                  </p>
-                  <button onClick={() => handleComparisonResult(true)}>
-                    Yes
-                  </button>
-                  <button onClick={() => handleComparisonResult(false)}>
-                    No
-                  </button>
-                </div>
-              )}
-          </div>
-        )}
+        ))}
       </div>
     </div>
   );
