@@ -19,9 +19,7 @@ function FlixterHeader({ likedMovies, watchedMovies }) {
         <NavLink className="navLink" to={"/myRankings"}>
           Watched Movies
         </NavLink>
-        {/* <NavLink className="navLink" to={"/recommendations"}>
-          Recommendations
-        </NavLink> */}
+
         <NavLink className="navLink" to={"/Friends"}>
           Friends
         </NavLink>

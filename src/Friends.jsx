@@ -1,5 +1,4 @@
 import React from "react";
-// import "./Bookmarks.css";
 import FlixterHeader from "./FlixterHeader";
 import FriendCard from "./FriendCard";
 import "./Friends.css";
