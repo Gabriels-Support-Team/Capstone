@@ -18,29 +18,33 @@ export function AuthProvider({ children }) {
     const unsubscribe = onAuthStateChanged(auth, initializeUser);
     return unsubscribe;
   }, []);
-
+  const login = (user) => {
+    setCurrentUser(user);
+  };
   async function initializeUser(user) {
     if (user) {
-      setCurrentUser({ ...user });
-
       // check if provider is email and password login
       const isEmail = user.providerData.some(
         (provider) => provider.providerId === "password"
       );
+      setCurrentUser(user);
       setIsEmailUser(isEmail);
       setUserLoggedIn(true);
     } else {
       setCurrentUser(null);
       setUserLoggedIn(false);
+      setCurrentUser(null);
     }
 
     setLoading(false);
   }
+  const userId = currentUser ? currentUser.uid : null;
 
   const value = {
     userLoggedIn,
     isEmailUser,
     currentUser,
+    userId,
     setCurrentUser,
   };
 

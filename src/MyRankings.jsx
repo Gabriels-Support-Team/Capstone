@@ -16,18 +16,12 @@ function MyRankings({ movies }) {
       },
     };
     fetch(
-      `https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=`,
+      `https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1`,
       options
     )
       .then((response) => response.json())
       .then((newData) => {
-        setData((data) => ({
-          ...newData,
-          results:
-            page != 1
-              ? [...data.results, ...newData.results]
-              : [...newData.results],
-        }));
+        setData(newData);
       })
       .catch((error) => console.error("Error fetching data:", error));
   }, [page]);
