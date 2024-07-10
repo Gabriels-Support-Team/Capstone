@@ -23,8 +23,6 @@ const Login = () => {
       try {
         const user = await doSignInWithEmailAndPassword(email, password);
         login(user);
-        console.log(user);
-        console.log("Logged in user ID:", currentUser); // Access user ID
       } catch (error) {
         setErrorMessage("incorrect username or password");
         setIsSigningIn(false);

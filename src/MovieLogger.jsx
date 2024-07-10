@@ -21,7 +21,6 @@ function MovieLogger() {
   };
   function logMovieForUser(movieId) {
     const rating = 1;
-    console.log(currentUser.uid);
     const userId = currentUser ? currentUser.uid : null; // This should be dynamically set based on the logged-in user
     fetch("http://localhost:3000/users/logMovie", {
       method: "POST",
@@ -31,9 +30,6 @@ function MovieLogger() {
       body: JSON.stringify({ userId, movieId, rating }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        console.log("Movie logged successfully:", data);
-      })
       .catch((error) => {
         console.error("Error logging movie:", error);
       });
