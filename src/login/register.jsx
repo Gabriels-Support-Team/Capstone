@@ -31,7 +31,7 @@ const Register = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ email }),
+          body: JSON.stringify({ email: email, id: user.uid }),
         });
         if (!response.ok) {
           throw new Error("Failed to create user in Prisma");

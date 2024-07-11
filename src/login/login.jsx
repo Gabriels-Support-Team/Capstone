@@ -8,6 +8,8 @@ import { NavLink } from "react-router-dom";
 
 const Login = () => {
   const { userLoggedIn } = useAuth();
+  const { currentUser } = useAuth();
+  const { login } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,7 +21,8 @@ const Login = () => {
     if (!isSigningIn) {
       setIsSigningIn(true);
       try {
-        await doSignInWithEmailAndPassword(email, password);
+        const user = await doSignInWithEmailAndPassword(email, password);
+        login(user);
       } catch (error) {
         setErrorMessage("incorrect username or password");
         setIsSigningIn(false);
