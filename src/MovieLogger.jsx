@@ -2,80 +2,61 @@ import React, { useState, useEffect } from "react";
 import FlixterHeader from "./FlixterHeader";
 import "./MovieLogger.css";
 import { useAuth } from "./contexts/authContext";
+import MovieSearch from "./MovieSearch";
 
 function MovieLogger() {
-  const [movies, setMovies] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [movieSelectedFlag, setMovieSelectedFlag] = useState(false);
   const { currentUser } = useAuth();
+  const [userMovies, setUserMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [moviesLogged, setMoviesLogged] = useState(0);
 
-  const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
+  useEffect(() => {
+    if (currentUser) {
+      fetch(`http://localhost:3000/users/userMovies/${currentUser.uid}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setUserMovies(data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching user movies:", error);
+          setLoading(false);
+        });
+    }
+  }, [currentUser, moviesLogged]);
+  const handleMovieLogged = () => {
+    setMoviesLogged(moviesLogged + 1);
   };
-  const submitSearch = (query) => {
-    const encodedQuery = encodeURIComponent(query);
-    fetch(`http://localhost:3000/movies/search?query=${encodedQuery}`)
-      .then((response) => response.json())
-      .then((data) => setMovies(data))
-      .catch((error) => console.error("Error fetching movies:", error));
-  };
-  function logMovieForUser(movieId) {
-    const rating = 1;
-    const userId = currentUser ? currentUser.uid : null; // This should be dynamically set based on the logged-in user
-    fetch("http://localhost:3000/users/logMovie", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ userId, movieId, rating }),
-    })
-      .then((response) => response.json())
-      .catch((error) => {
-        console.error("Error logging movie:", error);
-      });
+  if (loading) {
+    return <p>Loading...</p>;
   }
+
+  if (userMovies.length < 3) {
+    return (
+      <div>
+        <FlixterHeader />
+        <div className="loggingContainer">
+          <div className="question">
+            What is one movie that you really enjoyed?
+          </div>
+          <MovieSearch initialRating={7.5} onMovieLogged={handleMovieLogged} />
+          <div className="question">
+            What is one movie that you did not like?
+          </div>
+          <MovieSearch initialRating={2.5} onMovieLogged={handleMovieLogged} />
+          <div className="question">What is one movie that was just ok?</div>
+          <MovieSearch initialRating={5} onMovieLogged={handleMovieLogged} />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <FlixterHeader />
-      <div className="searchContainer">
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={handleSearchChange}
-          placeholder="Search"
-          className="searchBar"
-        />
-        <button
-          onClick={() => {
-            submitSearch(searchQuery);
-            setMovieSelectedFlag(false);
-          }}
-          className="submitSearchButton"
-        >
-          Search🔍
-        </button>
-      </div>
-      <div
-        className={
-          movieSelectedFlag ? "moviesListInactive" : "moviesListActive"
-        }
-      >
-        {movies.map((movie) => (
-          <div
-            onClick={() => {
-              setMovieSelectedFlag(true);
-              logMovieForUser(movie.movieId);
-            }}
-            className="movieSelection"
-            key={movie.movieId}
-          >
-            {movie.title}
-            <br></br>
-            <br></br>
-
-            {movie.genres}
-          </div>
-        ))}
+      <div className="loggingContainer">
+        <div className="question">New Movie to Log?</div>
+        <MovieSearch />
       </div>
     </div>
   );

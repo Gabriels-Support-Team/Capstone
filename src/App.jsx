@@ -13,6 +13,7 @@ import Friends from "./Friends";
 import MyRankings from "./MyRankings.jsx";
 import Profile from "./Profile.jsx";
 import MovieLogger from "./MovieLogger.jsx";
+import RankMovie from "./RankMovie.jsx";
 function App() {
   return (
     <AuthProvider>
@@ -74,6 +75,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <MovieLogger></MovieLogger>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/RankMovie"
+              element={
+                <ProtectedRoute>
+                  <RankMovie></RankMovie>
                 </ProtectedRoute>
               }
             />

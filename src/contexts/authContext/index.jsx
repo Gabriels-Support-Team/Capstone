@@ -13,7 +13,6 @@ export function AuthProvider({ children }) {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [isEmailUser, setIsEmailUser] = useState(false);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, initializeUser);
     return unsubscribe;
@@ -21,6 +20,7 @@ export function AuthProvider({ children }) {
   const login = (user) => {
     setCurrentUser(user);
   };
+
   async function initializeUser(user) {
     if (user) {
       // check if provider is email and password login
