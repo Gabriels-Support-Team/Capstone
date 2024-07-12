@@ -77,5 +77,24 @@ router.get("/userMovies/:userId", async (req, res) => {
     res.status(500).send("Error fetching movies");
   }
 });
+router.post("/getUserMovie", async (req, res) => {
+  const { userId, movieId } = req.body;
+  const userMovie = await prisma.userMovies.findUnique({
+    where: {
+      userId_movieId: {
+        userId: userId,
+        movieId: movieId,
+      },
+    },
+    include: {
+      movie: true, // Assuming you also want to fetch details of the movie itself
+    },
+  });
+  if (userMovie) {
+    res.json(userMovie);
+  } else {
+    res.status(404).send("UserMovie not found");
+  }
+});
 
 export default router;
