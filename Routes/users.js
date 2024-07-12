@@ -54,17 +54,27 @@ router.post("/logMovie", async (req, res) => {
 });
 
 router.get("/userMovies/:userId", async (req, res) => {
-  const userId = parseInt(req.params.userId);
+  const userId = req.params.userId;
   try {
     const userMovies = await prisma.userMovies.findMany({
       where: { userId: userId },
+      orderBy: {
+        rating: "asc",
+      },
       include: {
         movie: true,
       },
     });
-    res.json(userMovies);
+    res.json(
+      userMovies.map((um) => ({
+        movieId: um.movieId,
+        title: um.movie.title,
+        genres: um.movie.genres,
+        rating: um.rating,
+      }))
+    );
   } catch (error) {
-    res.statusCode(500).send("failed to retrieve movies");
+    res.status(500).send("Error fetching movies");
   }
 });
 

@@ -3,7 +3,7 @@
 }
 
 .searchContainer {
-  margin-top: 150px;
+  margin-top: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -32,4 +32,9 @@
   overflow: hidden;
   justify-content: center;
   padding: 10px;
+}
+.question {
+  color: white;
+  text-align: center;
+  padding-top: 130px;
 }
