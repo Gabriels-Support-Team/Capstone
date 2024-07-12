@@ -71,8 +71,7 @@ function RankMovie() {
   const handleComparison = async (prefersNewMovie) => {
     const winner = prefersNewMovie ? newUserMovie : userMovies[mid];
     const loser = prefersNewMovie ? userMovies[mid] : newUserMovie;
-    console.log("Winner Rating:", winner.rating); // Check if rating is valid
-    console.log("Loser Rating:", loser.rating); // Check if rating is valid
+
     const K = 1;
     const divisor = 100;
     const winnerExpected =
@@ -80,19 +79,13 @@ function RankMovie() {
     const loserExpected = 1 - winnerExpected;
     let winnerNewRating = winner.rating + K * (1 - winnerExpected);
     let loserNewRating = loser.rating - K * loserExpected;
-    console.log(winnerNewRating);
-    console.log(loserNewRating);
-    // Clamp ratings to ensure they remain within 1-10
+
     winnerNewRating = Math.max(1, Math.min(10, winnerNewRating));
     loserNewRating = Math.max(1, Math.min(10, loserNewRating));
-    console.log(winnerNewRating);
-    console.log(loserNewRating);
 
     try {
-      // Update winner and loser ratings sequentially
       await updateMovieRatings(winner.movieId, winnerNewRating);
       await updateMovieRatings(loser.movieId, loserNewRating);
-      // Update state after both ratings have been successfully updated
       if (prefersNewMovie) {
         setLow(mid + 1);
       } else {
@@ -100,7 +93,6 @@ function RankMovie() {
       }
     } catch (error) {
       console.error("Failed to update ratings:", error);
-      // Optionally handle errors, e.g., revert state changes or notify user
     }
   };
 
@@ -146,7 +138,7 @@ function RankMovie() {
                 setRating(2.5);
               }}
             >
-              I didn't like it{" "}
+              I didn't like it
             </button>
           </div>
         </div>

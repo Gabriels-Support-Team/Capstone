@@ -87,7 +87,7 @@ router.post("/getUserMovie", async (req, res) => {
       },
     },
     include: {
-      movie: true, // Assuming you also want to fetch details of the movie itself
+      movie: true,
     },
   });
   if (userMovie) {
