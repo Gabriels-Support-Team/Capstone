@@ -12,6 +12,21 @@ function RankMovie() {
   const { currentUser } = useAuth();
   const location = useLocation();
   const { movie: newMovie } = location.state || {};
+  const [rating, setRating] = useState(null);
+  const [newUserMovie, setNewUserMovie] = useState();
+
+  const fetchNewUserMovie = (userId, movieId) => {
+    fetch(`http://localhost:3000/users/getUserMovie`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId, movieId }),
+    })
+      .then((response) => response.json())
+      .then((data) => setNewUserMovie(data));
+  };
+  fetchNewUserMovie(currentUser.uid, newMovie.movieId);
 
   useEffect(() => {
     if (currentUser) {
@@ -38,11 +53,46 @@ function RankMovie() {
     }
   }, [low, high, newMovie]);
 
-  const handleComparison = (prefersNewMovie) => {
-    if (prefersNewMovie) {
-      setLow(mid + 1);
-    } else {
-      setHigh(mid - 1);
+  function updateMovieRatings(movieId, rating) {
+    const userId = currentUser.uid;
+    fetch("http://localhost:3000/users/logMovie", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId, movieId, rating }),
+    })
+      .then((response) => response.json())
+      .catch((error) => {
+        console.error("Error logging movie:", error);
+      });
+  }
+
+  const handleComparison = async (prefersNewMovie) => {
+    const winner = prefersNewMovie ? newUserMovie : userMovies[mid];
+    const loser = prefersNewMovie ? userMovies[mid] : newUserMovie;
+
+    const K = 1;
+    const divisor = 100;
+    const winnerExpected =
+      1 / (1 + Math.pow(10, (loser.rating - winner.rating) / divisor));
+    const loserExpected = 1 - winnerExpected;
+    let winnerNewRating = winner.rating + K * (1 - winnerExpected);
+    let loserNewRating = loser.rating - K * loserExpected;
+
+    winnerNewRating = Math.max(1, Math.min(10, winnerNewRating));
+    loserNewRating = Math.max(1, Math.min(10, loserNewRating));
+
+    try {
+      await updateMovieRatings(winner.movieId, winnerNewRating);
+      await updateMovieRatings(loser.movieId, loserNewRating);
+      if (prefersNewMovie) {
+        setLow(mid + 1);
+      } else {
+        setHigh(mid - 1);
+      }
+    } catch (error) {
+      console.error("Failed to update ratings:", error);
     }
   };
 
@@ -59,6 +109,42 @@ function RankMovie() {
   if (!newMovie || userMovies.length === 0) {
     return <p>Loading movies or no movies found...</p>;
   }
+  if (!rating) {
+    return (
+      <>
+        <FlixterHeader />
+        <div className="comparisonContainer">
+          <p>How was the Movie?</p>
+          <div className="buttonContainer">
+            <button
+              onClick={() => {
+                updateMovieRatings(newMovie.movieId, 7.5);
+                setRating(7.5);
+              }}
+            >
+              I Liked it!{" "}
+            </button>
+            <button
+              onClick={() => {
+                updateMovieRatings(newMovie.movieId, 5);
+                setRating(5);
+              }}
+            >
+              It was fine
+            </button>
+            <button
+              onClick={() => {
+                updateMovieRatings(newMovie.movieId, 2.5);
+                setRating(2.5);
+              }}
+            >
+              I didn't like it
+            </button>
+          </div>
+        </div>
+      </>
+    );
+  }
   return (
     <div>
       <FlixterHeader />
@@ -68,8 +154,10 @@ function RankMovie() {
         <h2>
           Do you prefer {newMovie.title} over {userMovies[mid].title}?
         </h2>
-        <button onClick={() => handleComparison(true)}>Yes</button>
-        <button onClick={() => handleComparison(false)}>No</button>
+        <div className="buttonContainer">
+          <button onClick={() => handleComparison(true)}>Yes</button>
+          <button onClick={() => handleComparison(false)}>No</button>
+        </div>
       </div>
     </div>
   );
