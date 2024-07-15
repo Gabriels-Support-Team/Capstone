@@ -34,7 +34,7 @@ function App() {
               path="/recommendations"
               element={
                 <ProtectedRoute>
-                  <Recommendations></Recommendations>
+                  <Recommendations />
                 </ProtectedRoute>
               }
             />
@@ -42,7 +42,7 @@ function App() {
               path="/Bookmarks"
               element={
                 <ProtectedRoute>
-                  <Bookmarks></Bookmarks>
+                  <Bookmarks />
                 </ProtectedRoute>
               }
             />
@@ -50,7 +50,7 @@ function App() {
               path="/Friends"
               element={
                 <ProtectedRoute>
-                  <Friends></Friends>
+                  <Friends />
                 </ProtectedRoute>
               }
             />
@@ -58,7 +58,7 @@ function App() {
               path="/myRankings"
               element={
                 <ProtectedRoute>
-                  <MyRankings></MyRankings>
+                  <MyRankings />
                 </ProtectedRoute>
               }
             />
@@ -66,7 +66,7 @@ function App() {
               path="/profile"
               element={
                 <ProtectedRoute>
-                  <Profile></Profile>
+                  <Profile />
                 </ProtectedRoute>
               }
             />
@@ -74,7 +74,7 @@ function App() {
               path="/MovieLogger"
               element={
                 <ProtectedRoute>
-                  <MovieLogger></MovieLogger>
+                  <MovieLogger />
                 </ProtectedRoute>
               }
             />
@@ -82,7 +82,7 @@ function App() {
               path="/RankMovie"
               element={
                 <ProtectedRoute>
-                  <RankMovie></RankMovie>
+                  <RankMovie />
                 </ProtectedRoute>
               }
             />

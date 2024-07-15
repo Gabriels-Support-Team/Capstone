@@ -2,29 +2,23 @@ import React, { useState, useEffect } from "react";
 import "./MyRankings.css";
 import FlixterHeader from "./FlixterHeader";
 import { getRatingColor } from "./utils";
-
+import { useAuth } from "./contexts/authContext";
 function MyRankings({ movies }) {
   const [page, setPage] = useState(1);
   const [data, setData] = useState();
-
+  const { currentUser } = useAuth();
   useEffect(() => {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,
-      },
-    };
-    fetch(
-      `https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1`,
-      options
-    )
-      .then((response) => response.json())
-      .then((newData) => {
-        setData(newData);
-      })
-      .catch((error) => console.error("Error fetching data:", error));
-  }, [page]);
+    if (currentUser) {
+      fetch(`http://localhost:3000/users/userMovies/${currentUser.uid}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setData(data.reverse());
+        })
+        .catch((error) =>
+          console.error("Error fetching ranked movies:", error)
+        );
+    }
+  }, [currentUser]);
 
   return (
     <div className="rankingsPage">
@@ -33,28 +27,22 @@ function MyRankings({ movies }) {
       <div className="sub">Explore personal ratings for movies you've seen</div>
 
       <div id="rankingscontainer">
-        {data?.results
-          ?.slice(0, 20)
-          .sort((a, b) => b.vote_average - a.vote_average)
-          .map((movie, index) => (
-            <div className="row">
-              <h1 className="rank">{index + 1}</h1>
-              <img
-                className="leaderboardImage"
-                src={`https://image.tmdb.org/t/p/w342${movie?.poster_path}`}
-              ></img>
-              <div className="name">{movie.original_title}</div>
-              <div
-                style={{
-                  borderColor: getRatingColor(movie?.vote_average),
-                  color: getRatingColor(movie?.vote_average),
-                }}
-                className="score"
-              >
-                {movie.vote_average.toFixed(2)}
-              </div>
+        {data?.map((movie, index) => (
+          <div className="row">
+            <h1 className="rank">{index + 1}</h1>
+
+            <div className="name">{movie.title}</div>
+            <div
+              style={{
+                borderColor: getRatingColor(movie?.rating),
+                color: getRatingColor(movie?.rating),
+              }}
+              className="score"
+            >
+              {movie.rating.toFixed(2)}
             </div>
-          ))}
+          </div>
+        ))}
       </div>
     </div>
   );
