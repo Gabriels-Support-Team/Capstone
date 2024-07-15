@@ -3,7 +3,10 @@ import { useAuth } from "./contexts/authContext";
 import { useLocation } from "react-router-dom";
 import "./RankMovie.css";
 import FlixterHeader from "./FlixterHeader";
+import { useNavigate } from "react-router-dom";
 function RankMovie() {
+  const navigate = useNavigate();
+
   const [userMovies, setUserMovies] = useState([]);
   const [low, setLow] = useState(0);
   const [high, setHigh] = useState(0);
@@ -14,38 +17,34 @@ function RankMovie() {
   const { movie: newMovie } = location.state || {};
   const [rating, setRating] = useState(null);
   const [newUserMovie, setNewUserMovie] = useState();
-
-  const fetchNewUserMovie = (userId, movieId) => {
-    fetch(`http://localhost:3000/users/getUserMovie`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ userId, movieId }),
-    })
-      .then((response) => response.json())
-      .then((data) => setNewUserMovie(data));
-  };
-  fetchNewUserMovie(currentUser.uid, newMovie.movieId);
-
   useEffect(() => {
     if (currentUser) {
       fetch(`http://localhost:3000/users/userMovies/${currentUser.uid}`)
         .then((response) => response.json())
         .then((data) => {
-          setUserMovies(data);
-          setHigh(data.length - 1);
-          setMid(Math.floor((data.length - 1) / 2));
+          const filteredMovies = data.filter(
+            (movie) => movie.movieId !== newMovie.movieId
+          );
+          setUserMovies(filteredMovies);
+          setHigh(filteredMovies.length - 1);
         })
         .catch((error) =>
           console.error("Error fetching ranked movies:", error)
         );
     }
-  }, [currentUser]);
-
+  }, [currentUser, newMovie]);
+  useEffect(() => {
+    if (rating !== null && userMovies.length > 0) {
+      const closest = userMovies.reduce((prev, curr) => {
+        return Math.abs(curr.rating - rating) < Math.abs(prev.rating - rating)
+          ? curr
+          : prev;
+      });
+      setMid(userMovies.indexOf(closest));
+    }
+  }, [rating, userMovies]);
   useEffect(() => {
     if (low > high) {
-      console.log(`Insert ${newMovie.title} at position ${low}`);
       setIsRanked(true);
       // Call to backend to update rankings
     } else {
@@ -69,13 +68,75 @@ function RankMovie() {
   }
 
   const handleComparison = async (prefersNewMovie) => {
-    const winner = prefersNewMovie ? newUserMovie : userMovies[mid];
-    const loser = prefersNewMovie ? userMovies[mid] : newUserMovie;
+    //get newly logged movie, initial
+    if (!currentUser || !newMovie || mid === undefined) {
+      console.error("Current user or new movie data is not available.");
+      return;
+    }
 
+    const response = await fetch(`http://localhost:3000/users/getUserMovie`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: currentUser.uid,
+        movieId: newMovie.movieId,
+      }),
+    });
+    const data = await response.json();
+    setNewUserMovie(data);
+
+    let newLow = low;
+    let newHigh = high;
+
+    if (prefersNewMovie) {
+      newLow = mid + 1;
+    } else {
+      newHigh = mid - 1;
+    }
+    // Clamp Bounds
+    newLow = Math.max(0, newLow);
+    newHigh = Math.min(userMovies.length - 1, newHigh);
+
+    let newDynamicRating;
+    if (prefersNewMovie) {
+      if (mid === userMovies.length - 1) {
+        // New movie is better than the best movie
+        newDynamicRating = 10
+      } else if(low==high){
+        const nextIndex = mid + 1;
+        newDynamicRating = (userMovies[mid].rating + userMovies[nextIndex].rating) / 2;
+      }else{
+        newDynamicRating = (userMovies[newLow].rating + userMovies[newHigh].rating) / 2;
+        console.log("new rating: "+newDynamicRating+ "lower Bound: " + userMovies[newLow].title+ userMovies[newLow].rating+ "Upper Bound: " + userMovies[newHigh].title+ userMovies[newHigh].rating)
+
+      }
+    } else {
+      if (mid === 0) {
+        // New movie is worse than the worst movie
+        newDynamicRating = 1;
+      } else if(low==high) {
+        const prevIndex = mid - 1;
+        newDynamicRating = (userMovies[mid].rating + userMovies[prevIndex].rating) / 2;
+      }else{
+        newDynamicRating = (userMovies[newLow].rating + userMovies[newHigh].rating) / 2;
+        console.log("new rating: "+newDynamicRating+ "lower Bound: " + userMovies[newLow].title+ userMovies[newLow].rating+ "Upper Bound: " + userMovies[newHigh].title+ userMovies[newHigh].rating)
+
+      }
+
+    }
+    let winner, loser;
+    if (prefersNewMovie) {
+      winner = data;
+      loser = userMovies[mid];
+    } else {
+      winner = userMovies[mid];
+      loser = data;
+    }
     const K = 1;
     const divisor = 100;
-    const winnerExpected =
-      1 / (1 + Math.pow(10, (loser.rating - winner.rating) / divisor));
+    const winnerExpected = 1 / (1 + Math.pow(10, (loser.rating - winner.rating) / divisor));
     const loserExpected = 1 - winnerExpected;
     let winnerNewRating = winner.rating + K * (1 - winnerExpected);
     let loserNewRating = loser.rating - K * loserExpected;
@@ -83,17 +144,18 @@ function RankMovie() {
     winnerNewRating = Math.max(1, Math.min(10, winnerNewRating));
     loserNewRating = Math.max(1, Math.min(10, loserNewRating));
 
-    try {
+    setLow(newLow);
+    setHigh(newHigh);
+
+    // Update ratings for both winner and loser
+    if (prefersNewMovie){
+    await updateMovieRatings(winner.movieId, newDynamicRating);
+     await updateMovieRatings(loser.movieId, loserNewRating);
+    }else{
       await updateMovieRatings(winner.movieId, winnerNewRating);
-      await updateMovieRatings(loser.movieId, loserNewRating);
-      if (prefersNewMovie) {
-        setLow(mid + 1);
-      } else {
-        setHigh(mid - 1);
-      }
-    } catch (error) {
-      console.error("Failed to update ratings:", error);
+      await updateMovieRatings(loser.movieId, newDynamicRating);
     }
+
   };
 
   if (isRanked) {
@@ -101,7 +163,10 @@ function RankMovie() {
       <div>
         <FlixterHeader />
         <div className="comparisonContainer">
-          {newMovie.title} has been ranked at position {low}!
+          {newMovie.title} has been ranked with rating {newUserMovie.rating}!
+          <button onClick={() => navigate("../movieLogger")}>
+            Log another
+          </button>
         </div>
       </div>
     );
@@ -128,6 +193,7 @@ function RankMovie() {
               onClick={() => {
                 updateMovieRatings(newMovie.movieId, 5);
                 setRating(5);
+
               }}
             >
               It was fine
@@ -136,6 +202,7 @@ function RankMovie() {
               onClick={() => {
                 updateMovieRatings(newMovie.movieId, 2.5);
                 setRating(2.5);
+
               }}
             >
               I didn't like it
@@ -150,7 +217,6 @@ function RankMovie() {
       <FlixterHeader />
 
       <div className="comparisonContainer">
-        {console.log(userMovies[mid])}
         <h2>
           Do you prefer {newMovie.title} over {userMovies[mid].title}?
         </h2>

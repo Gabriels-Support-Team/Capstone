@@ -17,7 +17,7 @@ export const doSignInWithEmailAndPassword = async (email, password) => {
     );
     return userCredential.user;
   } catch (error) {
-    throw error;
+    console.error("Error signing in with email and password:", error);
   }
 };
 
