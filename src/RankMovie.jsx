@@ -71,7 +71,8 @@ function RankMovie() {
   function adjustKFactor(comparisonCount) {
     const initialK = 1;
     const minK = 0.1; // Minimum K-factor to prevent it from becoming too small
-    return Math.max(minK, initialK / (1 + Math.log(1 + comparisonCount)));
+    const K = Math.max(minK, initialK / (1 + Math.log(1 + comparisonCount)));
+    return K
   }
   const handleComparison = async (prefersNewMovie) => {
     //get newly logged movie, initial
@@ -115,7 +116,6 @@ function RankMovie() {
         newDynamicRating = (userMovies[mid].rating + userMovies[nextIndex].rating) / 2;
       }else{
         newDynamicRating = (userMovies[newLow].rating + userMovies[newHigh].rating) / 2;
-        console.log("new rating: "+newDynamicRating+ "\nlower Bound: " + userMovies[newLow].title+ userMovies[newLow].rating+ "\nUpper Bound: " + userMovies[newHigh].title+ userMovies[newHigh].rating)
 
       }
     } else {
@@ -127,7 +127,6 @@ function RankMovie() {
         newDynamicRating = (userMovies[mid].rating + userMovies[prevIndex].rating) / 2;
       }else{
         newDynamicRating = (userMovies[newLow].rating + userMovies[newHigh].rating) / 2;
-        console.log("new rating: "+newDynamicRating+ "lower Bound: " + userMovies[newLow].title+ userMovies[newLow].rating+ "Upper Bound: " + userMovies[newHigh].title+ userMovies[newHigh].rating)
 
       }
 
@@ -140,10 +139,7 @@ function RankMovie() {
       winner = userMovies[mid];
       loser = data;
     }
-    console.log(userMovies[mid])
-    console.log(userMovies[mid].comparisons)
     const K = adjustKFactor(userMovies[mid].comparisons)
-    console.log(K)
     const divisor = 100;
     const winnerExpected = 1 / (1 + Math.pow(10, (loser.rating - winner.rating) / divisor));
     const loserExpected = 1 - winnerExpected;
@@ -152,7 +148,6 @@ function RankMovie() {
 
     winnerNewRating = Math.max(1, Math.min(10, winnerNewRating));
     loserNewRating = Math.max(1, Math.min(10, loserNewRating));
-    console.log(winnerNewRating-winner.rating)
     setLow(newLow);
     setHigh(newHigh);
 
