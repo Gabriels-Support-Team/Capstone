@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "./contexts/authContext";
 import { useNavigate } from "react-router-dom";
+import {motion} from "framer-motion";
 
 function MovieSearch({ initialRating, onMovieLogged }) {
   const [movies, setMovies] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [movieSelectedFlag, setMovieSelectedFlag] = useState(false);
+  const [random, setRandom] = useState([])
+  const [suggestions, setSuggestions] = useState(0)
+  const [rotate,setRotate] = useState(false)
   const { currentUser } = useAuth();
 
   const navigate = useNavigate();
@@ -20,6 +24,11 @@ function MovieSearch({ initialRating, onMovieLogged }) {
       .then((data) => setMovies(data))
       .catch((error) => console.error("Error fetching movies:", error));
   };
+  useEffect(() =>{
+    fetch(`http://localhost:3000/movies/random`)
+    .then((response) => response.json())
+    .then((data) => setRandom(data))
+  },[suggestions])
   function logMovieForUser(movieId) {
     const rating = initialRating;
     const userId = currentUser ? currentUser.uid : null; // This should be dynamically set based on the logged-in user
@@ -50,23 +59,39 @@ function MovieSearch({ initialRating, onMovieLogged }) {
           placeholder="Search"
           className="searchBar"
         />
-        <button
+        <motion.button
+          animate={{x:0, scale:1,rotate:rotate? 360:0}}
+          initial={{scale:0}}
           onClick={() => {
+            setRotate(!rotate)
             submitSearch(searchQuery);
             setMovieSelectedFlag(false);
           }}
           className="submitSearchButton"
         >
           Search🔍
-        </button>
+        </motion.button>
       </div>
       <div
         className={
           movieSelectedFlag ? "moviesListInactive" : "moviesListActive"
         }
       >
+
         {movies.map((movie) => (
-          <div
+          <motion.div
+            whileTap={{ scale: 0.9 }}
+            initial={{
+              opacity: 0,
+            }}
+            whileInView={{
+              opacity: 1,
+            }}
+            viewport={{
+              // once: true,
+               margin: "-20px",
+              amount: "all",
+            }}
             onClick={() => {
               setMovieSelectedFlag(true);
               if (initialRating) {
@@ -83,8 +108,44 @@ function MovieSearch({ initialRating, onMovieLogged }) {
             <br></br>
 
             {movie.genres}
-          </div>
+          </motion.div>
         ))}
+        <h3>Movies you may have seen:</h3>
+        {random.map((movie) =>(
+          <motion.div
+          animate={{x:0, scale:1}}
+          whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            initial={{
+              opacity: 0,
+            }}
+            whileInView={{
+              opacity: 1,
+            }}
+            viewport={{
+              // once: true,
+               margin: "-20px",
+              amount: "all",
+            }}
+          onClick={() => {
+            setMovieSelectedFlag(true);
+            if (initialRating) {
+              logMovieForUser(movie.movieId);
+            } else {
+              navigate("../rankMovie", { state: { movie } });
+            }
+          }}
+          className="movieSelection"
+          key={movie.movieId}
+        >
+          {movie.title}
+          <br></br>
+          <br></br>
+
+          {movie.genres}
+        </motion.div>
+        ))}
+        <button onClick={()=>{setSuggestions(suggestions+1)}}>New Suggestions</button>
       </div>
     </div>
   );

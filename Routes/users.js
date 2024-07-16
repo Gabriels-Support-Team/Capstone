@@ -43,11 +43,15 @@ router.post("/logMovie", async (req, res) => {
     },
     update: {
       rating: rating,
+      comparisons: {
+        increment: 1
+      }
     },
     create: {
       userId: userId,
       movieId: movieId,
       rating: rating,
+      comparisons: 0
     },
   });
   res.json(upsertMovie);
@@ -71,6 +75,7 @@ router.get("/userMovies/:userId", async (req, res) => {
         title: um.movie.title,
         genres: um.movie.genres,
         rating: um.rating,
+        comparisons: um.comparisons
       }))
     );
   } catch (error) {

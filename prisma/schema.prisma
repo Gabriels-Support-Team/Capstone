@@ -14,7 +14,7 @@ datasource db {
 }
 
 model User{
-  id String @id 
+  id String @id
   email String
   movies UserMovies[]
 }
@@ -30,6 +30,6 @@ model UserMovies {
   movie  Movie  @relation(fields: [movieId], references: [movieId])
   movieId Int
   rating Float
+  comparisons Int    @default(0)
   @@id([userId, movieId])
 }
-
