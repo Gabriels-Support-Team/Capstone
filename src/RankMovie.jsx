@@ -4,6 +4,8 @@ import { useLocation } from "react-router-dom";
 import "./RankMovie.css";
 import FlixterHeader from "./FlixterHeader";
 import { useNavigate } from "react-router-dom";
+import { motion } from 'framer-motion';
+
 function RankMovie() {
   const navigate = useNavigate();
 
@@ -66,7 +68,11 @@ function RankMovie() {
         console.error("Error logging movie:", error);
       });
   }
-
+  function adjustKFactor(comparisonCount) {
+    const initialK = 1;
+    const minK = 0.1; // Minimum K-factor to prevent it from becoming too small
+    return Math.max(minK, initialK / (1 + Math.log(1 + comparisonCount)));
+  }
   const handleComparison = async (prefersNewMovie) => {
     //get newly logged movie, initial
     if (!currentUser || !newMovie || mid === undefined) {
@@ -109,7 +115,7 @@ function RankMovie() {
         newDynamicRating = (userMovies[mid].rating + userMovies[nextIndex].rating) / 2;
       }else{
         newDynamicRating = (userMovies[newLow].rating + userMovies[newHigh].rating) / 2;
-        console.log("new rating: "+newDynamicRating+ "lower Bound: " + userMovies[newLow].title+ userMovies[newLow].rating+ "Upper Bound: " + userMovies[newHigh].title+ userMovies[newHigh].rating)
+        console.log("new rating: "+newDynamicRating+ "\nlower Bound: " + userMovies[newLow].title+ userMovies[newLow].rating+ "\nUpper Bound: " + userMovies[newHigh].title+ userMovies[newHigh].rating)
 
       }
     } else {
@@ -134,7 +140,10 @@ function RankMovie() {
       winner = userMovies[mid];
       loser = data;
     }
-    const K = 1;
+    console.log(userMovies[mid])
+    console.log(userMovies[mid].comparisons)
+    const K = adjustKFactor(userMovies[mid].comparisons)
+    console.log(K)
     const divisor = 100;
     const winnerExpected = 1 / (1 + Math.pow(10, (loser.rating - winner.rating) / divisor));
     const loserExpected = 1 - winnerExpected;
@@ -143,7 +152,7 @@ function RankMovie() {
 
     winnerNewRating = Math.max(1, Math.min(10, winnerNewRating));
     loserNewRating = Math.max(1, Math.min(10, loserNewRating));
-
+    console.log(winnerNewRating-winner.rating)
     setLow(newLow);
     setHigh(newHigh);
 
@@ -151,6 +160,7 @@ function RankMovie() {
     if (prefersNewMovie){
     await updateMovieRatings(winner.movieId, newDynamicRating);
      await updateMovieRatings(loser.movieId, loserNewRating);
+
     }else{
       await updateMovieRatings(winner.movieId, winnerNewRating);
       await updateMovieRatings(loser.movieId, newDynamicRating);
@@ -163,7 +173,10 @@ function RankMovie() {
       <div>
         <FlixterHeader />
         <div className="comparisonContainer">
-          {newMovie.title} has been ranked with rating {newUserMovie.rating}!
+          {newMovie.title} has been ranked!
+          <button onClick={() => navigate("../myRankings")}>
+            See Rankings
+          </button>
           <button onClick={() => navigate("../movieLogger")}>
             Log another
           </button>
@@ -215,14 +228,29 @@ function RankMovie() {
   return (
     <div>
       <FlixterHeader />
-
       <div className="comparisonContainer">
-        <h2>
-          Do you prefer {newMovie.title} over {userMovies[mid].title}?
-        </h2>
+        <motion.div
+          initial={{ opacity: 0, x:100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h2>Do you prefer {newMovie.title} over {userMovies[mid].title}?</h2>
+        </motion.div>
         <div className="buttonContainer">
-          <button onClick={() => handleComparison(true)}>Yes</button>
-          <button onClick={() => handleComparison(false)}>No</button>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => handleComparison(true)}
+          >
+            Yes
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => handleComparison(false)}
+          >
+            No
+          </motion.button>
         </div>
       </div>
     </div>

@@ -3,11 +3,56 @@ p {
   color: white;
 }
 
+
+/* General body and container styles */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f9;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+
 .comparisonContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-top: 130px;
+  margin-top: 130px;
   color: white;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  padding: 20px;
+  margin: 130px auto;
+  width: 80%;
+  max-width: 600px;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+button {
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  padding: 10px 20px;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+
+
+h2 {
+  color: #333;
+  font-size: 24px;
+}
+
+p {
+  font-size: 18px;
+  color: #666;
 }

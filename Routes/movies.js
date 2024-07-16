@@ -25,4 +25,13 @@ router.get("/search", (req, res) => {
     })
     .then((movies) => res.json(movies));
 });
+router.get("/random", async (req, res) => {
+  try {
+    const randomMovies = await prisma.$queryRaw`SELECT * FROM "Movie" ORDER BY RANDOM() LIMIT 3`;
+    res.json(randomMovies);
+  } catch (error) {
+    console.error("Failed to fetch random movies:", error);
+    res.status(500).json({ error: "Failed to fetch random movies" });
+  }
+});
 export default router;
