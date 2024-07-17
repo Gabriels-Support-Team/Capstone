@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import "./RankMovie.css";
 import FlixterHeader from "./FlixterHeader";
 import { useNavigate } from "react-router-dom";
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 
 function RankMovie() {
   const navigate = useNavigate();
@@ -72,7 +72,7 @@ function RankMovie() {
     const initialK = 1;
     const minK = 0.1; // Minimum K-factor to prevent it from becoming too small
     const K = Math.max(minK, initialK / (1 + Math.log(1 + comparisonCount)));
-    return K
+    return K;
   }
   const handleComparison = async (prefersNewMovie) => {
     //get newly logged movie, initial
@@ -110,26 +110,27 @@ function RankMovie() {
     if (prefersNewMovie) {
       if (mid === userMovies.length - 1) {
         // New movie is better than the best movie
-        newDynamicRating = 10
-      } else if(low==high){
+        newDynamicRating = 10;
+      } else if (low == high) {
         const nextIndex = mid + 1;
-        newDynamicRating = (userMovies[mid].rating + userMovies[nextIndex].rating) / 2;
-      }else{
-        newDynamicRating = (userMovies[newLow].rating + userMovies[newHigh].rating) / 2;
-
+        newDynamicRating =
+          (userMovies[mid].rating + userMovies[nextIndex].rating) / 2;
+      } else {
+        newDynamicRating =
+          (userMovies[newLow].rating + userMovies[newHigh].rating) / 2;
       }
     } else {
       if (mid === 0) {
         // New movie is worse than the worst movie
         newDynamicRating = 1;
-      } else if(low==high) {
+      } else if (low == high) {
         const prevIndex = mid - 1;
-        newDynamicRating = (userMovies[mid].rating + userMovies[prevIndex].rating) / 2;
-      }else{
-        newDynamicRating = (userMovies[newLow].rating + userMovies[newHigh].rating) / 2;
-
+        newDynamicRating =
+          (userMovies[mid].rating + userMovies[prevIndex].rating) / 2;
+      } else {
+        newDynamicRating =
+          (userMovies[newLow].rating + userMovies[newHigh].rating) / 2;
       }
-
     }
     let winner, loser;
     if (prefersNewMovie) {
@@ -139,9 +140,10 @@ function RankMovie() {
       winner = userMovies[mid];
       loser = data;
     }
-    const K = adjustKFactor(userMovies[mid].comparisons)
+    const K = adjustKFactor(userMovies[mid].comparisons);
     const divisor = 100;
-    const winnerExpected = 1 / (1 + Math.pow(10, (loser.rating - winner.rating) / divisor));
+    const winnerExpected =
+      1 / (1 + Math.pow(10, (loser.rating - winner.rating) / divisor));
     const loserExpected = 1 - winnerExpected;
     let winnerNewRating = winner.rating + K * (1 - winnerExpected);
     let loserNewRating = loser.rating - K * loserExpected;
@@ -152,15 +154,13 @@ function RankMovie() {
     setHigh(newHigh);
 
     // Update ratings for both winner and loser
-    if (prefersNewMovie){
-    await updateMovieRatings(winner.movieId, newDynamicRating);
-     await updateMovieRatings(loser.movieId, loserNewRating);
-
-    }else{
+    if (prefersNewMovie) {
+      await updateMovieRatings(winner.movieId, newDynamicRating);
+      await updateMovieRatings(loser.movieId, loserNewRating);
+    } else {
       await updateMovieRatings(winner.movieId, winnerNewRating);
       await updateMovieRatings(loser.movieId, newDynamicRating);
     }
-
   };
 
   if (isRanked) {
@@ -201,7 +201,6 @@ function RankMovie() {
               onClick={() => {
                 updateMovieRatings(newMovie.movieId, 5);
                 setRating(5);
-
               }}
             >
               It was fine
@@ -210,7 +209,6 @@ function RankMovie() {
               onClick={() => {
                 updateMovieRatings(newMovie.movieId, 2.5);
                 setRating(2.5);
-
               }}
             >
               I didn't like it
@@ -225,11 +223,13 @@ function RankMovie() {
       <FlixterHeader />
       <div className="comparisonContainer">
         <motion.div
-          initial={{ opacity: 0, x:100 }}
+          initial={{ opacity: 0, x: 100 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h2>Do you prefer {newMovie.title} over {userMovies[mid].title}?</h2>
+          <h2>
+            Do you prefer {newMovie.title} over {userMovies[mid].title}?
+          </h2>
         </motion.div>
         <div className="buttonContainer">
           <motion.button
