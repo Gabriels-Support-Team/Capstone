@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useAuth } from "./contexts/authContext";
 import "./Recommendations.css";
 import { useLocation } from "react-router-dom";
 import MovieCard from "./MovieCard";
@@ -10,7 +11,8 @@ function Recommendations() {
   const { data } = location.state || { data: null };
   const highlightedMovie = data?.results?.[0];
   const ratingColor = getRatingColor(highlightedMovie.vote_average);
-
+  const [recommendations, setRecommendations] = useState();
+  const { currentUser } = useAuth();
   const movieCards = data?.results
     ?.slice(0, 20)
     .map((movie, index) => (
@@ -21,10 +23,24 @@ function Recommendations() {
         movieTitle={movie.original_title}
       />
     ));
+  function fetchRecommendations() {
+    fetch(`http://localhost:3000/ml/fetchRecs?userId=${currentUser.uid}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setRecommendations(data);
+      });
+  }
   return (
     <>
       <FlixterHeader></FlixterHeader>
       <h1 className="recTitle">Personalized Recommendations</h1>;
+      <button
+        onClick={() => {
+          fetchRecommendations();
+        }}
+      >
+        FETCH RECS
+      </button>
       {highlightedMovie ? (
         <>
           <div className="highlightedMovie">

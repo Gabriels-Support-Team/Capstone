@@ -11,7 +11,7 @@ import json
 def main():
     def merge_ratings(new_ratings):
 
-        file_path = '../ml-1m/ratings.dat'
+        file_path = '/Users/gabrielalvarado/meta/Capstone/Capstone/ml-1m/ratings.dat'
         df = pd.read_csv(file_path, sep='::', engine='python', names=['userID', 'itemID', 'rating', 'timestamp'], header=None)
         new_ratings_df = pd.DataFrame(new_ratings)
         df = df._append(new_ratings_df, ignore_index=True)
@@ -35,8 +35,7 @@ def main():
         # First map the predictions to each user.
         top_n = defaultdict(list)
         for uid, iid, true_r, est, _ in predictions:
-            if (uid == 'rOoKKGzDFxa2Av7KogZVszUTJuI3'):
-                top_n[uid].append((iid, est))
+            top_n[uid].append((iid, est))
 
         # Then sort the predictions for each user and retrieve the k highest ones.
         for uid, user_ratings in top_n.items():
@@ -48,7 +47,7 @@ def main():
 
     # First train an SVD algorithm on the movielens dataset.
 
-    def run_ml(df):
+    def run_ml(df,user_id):
         # path to dataset file
         file_path = os.path.expanduser("./ml-1m/ratings.dat")
 
@@ -69,16 +68,22 @@ def main():
         predictions = algo.test(testset)
 
         top_n = get_top_n(predictions, n=10)
-        return(top_n)
+        result = [{'itemID': item[0], 'rating': item[1]} for item in top_n[user_id]]
+
+        if(user_id in top_n):
+            result = [{'itemID': item[0], 'rating': item[1]} for item in top_n[user_id]]
+            print(json.dumps(result))
 
     # Read the data from stdin
-
+    
+    if len(sys.argv) < 2:
+        print("No UserID", file=sys.stderr)
+        sys.exit(2)
+    user_id = sys.argv[1]
     input_data = sys.stdin.read()
     new_ratings = json.loads(input_data)
-    # Process the data
-
     complete_data = merge_ratings(new_ratings)
-    recs = run_ml(complete_data)
+    recs = run_ml(complete_data, user_id)
 
 
 
