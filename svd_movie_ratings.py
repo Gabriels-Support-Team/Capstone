@@ -9,13 +9,42 @@ import pandas as pd
 import sys
 import json
 def main():
-    def merge_ratings(new_ratings):
-
-        file_path = '/Users/gabrielalvarado/meta/Capstone/Capstone/ml-1m/ratings.dat'
-        df = pd.read_csv(file_path, sep='::', engine='python', names=['userID', 'itemID', 'rating', 'timestamp'], header=None)
+    def determine_age_group(age):
+        if age < 18:
+            return 1
+        elif age >= 18 and age <= 24:
+            return 18
+        elif age >= 25 and age <= 34:
+            return 25
+        elif age >= 35 and age <= 44:
+            return 35
+        elif age >= 45 and age <= 49:
+            return 45
+        elif age >= 50 and age <= 55:
+            return 50
+        else:
+            return 56
+        
+    def get_user_ids_in_same_age_group(users_file_path, target_age_group):
+        users_df = pd.read_csv(users_file_path, sep='::', engine='python', names=['userID', 'gender', 'age', 'occupation', 'Zip'], header=None)
+        # find all users that are in the target age group
+        matching_users = users_df[users_df['age'] == target_age_group]
+        # create and return a set of target user IDs 
+        user_ids = set(matching_users['userID'])
+        return user_ids
+    
+    def filter_ratings_by_user_ids(ratings_file_path, user_ids):
+        ratings_df = pd.read_csv(ratings_file_path, sep='::', engine='python', names=['userID', 'itemID', 'rating', 'timestamp'], header=None)
+        # Filter ratings data to only be ratings attached to users who are in age group
+        filtered_ratings = ratings_df[ratings_df['userID'].isin(user_ids)]
+        return filtered_ratings
+    
+    
+    def merge_ratings(filtered_ratings, new_ratings):
+        #Add logged in Users' ratings to the static ratings dataset
         new_ratings_df = pd.DataFrame(new_ratings)
-        df = df._append(new_ratings_df, ignore_index=True)
-        return df
+        filtered_ratings = filtered_ratings._append(new_ratings_df, ignore_index=True)
+        return filtered_ratings
 
 
     def get_top_n(predictions, n=10):
@@ -44,18 +73,12 @@ def main():
 
         return top_n
 
-
-    # First train an SVD algorithm on the movielens dataset.
-
     def run_ml(df,user_id):
-        # path to dataset file
-        file_path = os.path.expanduser("./ml-1m/ratings.dat")
-
         # As we're loading a custom dataset, we need to define a reader. In the
         # movielens-100k dataset, each line has the following format:
         # 'user item rating timestamp', separated by '\t' characters.
+        
         reader = Reader(line_format="user item rating timestamp", sep="::")
-
         data = Dataset.load_from_df(df[['userID', 'itemID', 'rating']], reader)
 
         # We can now use this dataset as we please, e.g. calling cross_validate
@@ -74,17 +97,22 @@ def main():
             result = [{'itemID': item[0], 'rating': item[1]} for item in top_n[user_id]]
             print(json.dumps(result))
 
-    # Read the data from stdin
-    
+
     if len(sys.argv) < 2:
         print("No UserID", file=sys.stderr)
         sys.exit(2)
+    ratings_file_path = '/Users/gabrielalvarado/meta/Capstone/Capstone/ml-1m/ratings.dat'
+    users_file_path = '/Users/gabrielalvarado/meta/Capstone/Capstone/ml-1m/users.dat'
+     
     user_id = sys.argv[1]
+    user_age = sys.argv[2]
+    age_group = determine_age_group(int(user_age))
     input_data = sys.stdin.read()
     new_ratings = json.loads(input_data)
-    complete_data = merge_ratings(new_ratings)
+    age_bucket_users = get_user_ids_in_same_age_group(users_file_path, age_group)
+    filtered_ratings = filter_ratings_by_user_ids(ratings_file_path, age_bucket_users)
+    complete_data = merge_ratings(filtered_ratings, new_ratings)
     recs = run_ml(complete_data, user_id)
-
 
 
 
