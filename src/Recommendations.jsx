@@ -28,7 +28,6 @@ function Recommendations() {
     fetch(`http://localhost:3000/ml/fetchRecs?userId=${currentUser.uid}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setRecommendations(data);
       });
   }
@@ -37,25 +36,20 @@ function Recommendations() {
       const fetchAllMovieDetails = async () => {
         const movieCards = await Promise.all(
           recommendations.map(async (movie) => {
-            try {
-              const response = await fetch(
-                `http://localhost:3000/movies/${movie.itemID}`
-              );
-              if (!response.ok) {
-                throw new Error("Failed to fetch movie details");
-              }
-              const details = await response.json();
-              return (
-                <MovieCard
-                  key={movie.itemID}
-                  movieRating={movie.rating * 2}
-                  movieTitle={details.title}
-                />
-              );
-            } catch (error) {
-              console.error("Error fetching movie details:", error);
-              return null; // or handle error differently
+            const response = await fetch(
+              `http://localhost:3000/movies/${movie.itemID}`
+            );
+            if (!response.ok) {
+              throw new Error("Failed to fetch movie details");
             }
+            const details = await response.json();
+            return (
+              <MovieCard
+                key={movie.itemID}
+                movieRating={movie.rating * 2}
+                movieTitle={details.title}
+              />
+            );
           })
         );
         setMovieCards2(movieCards.filter((card) => card !== null));

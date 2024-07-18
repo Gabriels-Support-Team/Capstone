@@ -31,7 +31,6 @@ router.get("/random", (req, res) => {
       res.json(randomMovies);
     })
     .catch((error) => {
-      console.error("Failed to fetch random movies:", error);
       res.status(500).json({ error: "Failed to fetch random movies" });
     });
 });
@@ -44,13 +43,7 @@ router.get("/:id", (req, res) => {
     .then((movie) => {
       if (movie) {
         res.json(movie);
-      } else {
-        res.status(404).json({ error: "Movie not found" });
       }
-    })
-    .catch((error) => {
-      console.error("Failed to fetch movie:", error);
-      res.status(500).json({ error: "Failed to fetch movie" });
     });
 });
 export default router;
