@@ -10,15 +10,16 @@ function RankMovie() {
   const navigate = useNavigate();
 
   const [userMovies, setUserMovies] = useState([]);
-  const [low, setLow] = useState(0);
-  const [high, setHigh] = useState(0);
-  const [mid, setMid] = useState(0);
+  const [low, setLow] = useState(0); // Lower bound for binary search starts at 0
+  const [high, setHigh] = useState(0); // Upper bound for binary search
+  const [mid, setMid] = useState(0); // Middle index for binary search
   const [isRanked, setIsRanked] = useState(false);
   const { currentUser } = useAuth();
   const location = useLocation();
   const { movie: newMovie } = location.state || {};
   const [rating, setRating] = useState(null);
   const [newUserMovie, setNewUserMovie] = useState();
+  // Fetch user's movies excluding the new movie to be ranked
   useEffect(() => {
     if (currentUser) {
       fetch(`http://localhost:3000/users/userMovies/${currentUser.uid}`)
@@ -35,6 +36,7 @@ function RankMovie() {
         );
     }
   }, [currentUser, newMovie]);
+  // Determine the closest movie rating to the new movie's rating for initial comparison
   useEffect(() => {
     if (rating !== null && userMovies.length > 0) {
       const closest = userMovies.reduce((prev, curr) => {
@@ -45,6 +47,7 @@ function RankMovie() {
       setMid(userMovies.indexOf(closest));
     }
   }, [rating, userMovies]);
+  // Binary search logic to find the correct position for the new movie
   useEffect(() => {
     if (low > high) {
       setIsRanked(true);
@@ -53,7 +56,7 @@ function RankMovie() {
       setMid(Math.floor((low + high) / 2));
     }
   }, [low, high, newMovie]);
-
+  // Function to update movie ratings in the backend
   function updateMovieRatings(movieId, rating) {
     const userId = currentUser.uid;
     fetch("http://localhost:3000/users/logMovie", {
@@ -68,12 +71,16 @@ function RankMovie() {
         console.error("Error logging movie:", error);
       });
   }
+  // Adjust K-factor based on the number of comparisons,
+  // ensuring it decreases logarithmically. Comparison count increments in the backend each time a comparison is made
+  // This way ratings can diverge to a true rating instead of fluctuating constantly. This was a unique an innovative design choice
   function adjustKFactor(comparisonCount) {
     const initialK = 1;
     const minK = 0.1; // Minimum K-factor to prevent it from becoming too small
     const K = Math.max(minK, initialK / (1 + Math.log(1 + comparisonCount)));
     return K;
   }
+  // Handle user's preference input and adjust ratings accordingly
   const handleComparison = async (prefersNewMovie) => {
     //get newly logged movie, initial
     if (!currentUser || !newMovie || mid === undefined) {
@@ -96,26 +103,36 @@ function RankMovie() {
 
     let newLow = low;
     let newHigh = high;
-
+    // Update search bounds based on user preference
     if (prefersNewMovie) {
       newLow = mid + 1;
     } else {
       newHigh = mid - 1;
     }
-    // Clamp Bounds
+    // Ensure bounds do not exceed the limits
     newLow = Math.max(0, newLow);
     newHigh = Math.min(userMovies.length - 1, newHigh);
 
+    /**
+     *  The decision was made to apply the Elo rating system only to movies that have already been logged.
+     *  The traditional Elo system did not suit our specific requirements, prompting the creation of a custom approach.
+     *  In this design, the rating for a new movie is recalculated using the average of the two bounding comparison values.
+     *  Meanwhile, only previously logged movies have their ratings updated based on a predictive Elo model.
+     * This method allows movies to be appropriately rewarded or penalized based on their matchup outcomes, enabling their ratings
+     * to adjust dynamically.
+     */
     let newDynamicRating;
     if (prefersNewMovie) {
       if (mid === userMovies.length - 1) {
         // New movie is better than the best movie
         newDynamicRating = 10;
       } else if (low === high) {
+        // If low equals high,the movie has made it to the end of the comparisons and should be placed between two movies
         const nextIndex = mid + 1;
         newDynamicRating =
           (userMovies[mid].rating + userMovies[nextIndex].rating) / 2;
       } else {
+        //Average of the upperbound and lower bound that get smaller as comparisons are made
         newDynamicRating =
           (userMovies[newLow].rating + userMovies[newHigh].rating) / 2;
       }
@@ -141,6 +158,10 @@ function RankMovie() {
       winner = userMovies[mid];
       loser = data;
     }
+    // Calculate the expected scores and new ratings using the Elo rating system
+    //Dyanamic K factor uniquely designed so that Ratings Converge to their true value
+    //In traditional Elo systems, ratings never converge, a chess player can go from being the best to the worst or vice versa
+    //This design combats that issue: we dont wan't all movies to converge to 1 or 10 we went them to converge to their own unique ratings
     const K = adjustKFactor(userMovies[mid].comparisons);
     const divisor = 100;
     const winnerExpected =
@@ -148,9 +169,11 @@ function RankMovie() {
     const loserExpected = 1 - winnerExpected;
     let winnerNewRating = winner.rating + K * (1 - winnerExpected);
     let loserNewRating = loser.rating - K * loserExpected;
-
+    // Ensure ratings stay within the bounds of 1 to 10
     winnerNewRating = Math.max(1, Math.min(10, winnerNewRating));
     loserNewRating = Math.max(1, Math.min(10, loserNewRating));
+    // Update the search bounds for the next iteration
+
     setLow(newLow);
     setHigh(newHigh);
 
@@ -196,7 +219,7 @@ function RankMovie() {
                 setRating(7.5);
               }}
             >
-              I Liked it!{" "}
+              I Liked it!
             </button>
             <button
               onClick={() => {
