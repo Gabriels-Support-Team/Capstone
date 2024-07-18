@@ -23,7 +23,10 @@ function MovieCard({
   const ratingColor = getRatingColor(movieRating);
   return (
     <div className="movieCard" onClick={openModal}>
-      <img className="movieImage" src={movieImage} alt={movieTitle}></img>
+      {movieImage && (
+        <img className="movieImage" src={movieImage} alt={movieTitle}></img>
+      )}
+      {movieImage ? null : <div className="movieTitle">{movieTitle}</div>}
       <div
         className="ratingCircle"
         style={{ borderColor: ratingColor, color: ratingColor }}

@@ -13,6 +13,7 @@ function Recommendations() {
   const ratingColor = getRatingColor(highlightedMovie.vote_average);
   const [recommendations, setRecommendations] = useState();
   const { currentUser } = useAuth();
+  const [movieCards2, setMovieCards2] = useState();
   const movieCards = data?.results
     ?.slice(0, 20)
     .map((movie, index) => (
@@ -30,6 +31,33 @@ function Recommendations() {
         setRecommendations(data);
       });
   }
+  useEffect(() => {
+    if (recommendations) {
+      const fetchAllMovieDetails = async () => {
+        const movieCards = await Promise.all(
+          recommendations.map(async (movie) => {
+            const response = await fetch(
+              `http://localhost:3000/movies/${movie.itemID}`
+            );
+            if (!response.ok) {
+              throw new Error("Failed to fetch movie details");
+            }
+            const details = await response.json();
+            return (
+              <MovieCard
+                key={movie.itemID}
+                movieRating={movie.rating * 2}
+                movieTitle={details.title}
+              />
+            );
+          })
+        );
+        setMovieCards2(movieCards.filter((card) => card !== null));
+      };
+      fetchAllMovieDetails();
+    }
+  }, [recommendations]);
+
   return (
     <>
       <FlixterHeader></FlixterHeader>
@@ -41,6 +69,7 @@ function Recommendations() {
       >
         FETCH RECS
       </button>
+      <div className="recommendationsContainer">{movieCards2}</div>
       {highlightedMovie ? (
         <>
           <div className="highlightedMovie">
