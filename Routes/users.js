@@ -10,11 +10,12 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { email, id } = req.body;
+  const { email, id, age } = req.body;
   const newUser = await prisma.user.create({
     data: {
       email,
       id,
+      age: parseInt(age),
     },
   });
   res.json(newUser);
@@ -44,14 +45,14 @@ router.post("/logMovie", async (req, res) => {
     update: {
       rating: rating,
       comparisons: {
-        increment: 1
-      }
+        increment: 1,
+      },
     },
     create: {
       userId: userId,
       movieId: movieId,
       rating: rating,
-      comparisons: 0
+      comparisons: 0,
     },
   });
   res.json(upsertMovie);
@@ -75,7 +76,7 @@ router.get("/userMovies/:userId", async (req, res) => {
         title: um.movie.title,
         genres: um.movie.genres,
         rating: um.rating,
-        comparisons: um.comparisons
+        comparisons: um.comparisons,
       }))
     );
   } catch (error) {
@@ -101,5 +102,19 @@ router.post("/getUserMovie", async (req, res) => {
     res.status(404).send("UserMovie not found");
   }
 });
-
+router.get("/userAge/:userId", async (req, res) => {
+  const { userId } = req.params;
+  prisma.user
+    .findUnique({
+      where: { id: userId },
+      select: { age: true },
+    })
+    .then((user) => {
+      if (user) {
+        res.json({ userId: userId, age: user.age });
+      } else {
+        res.status(404).send("User not found");
+      }
+    });
+});
 export default router;

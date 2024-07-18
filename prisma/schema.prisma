@@ -16,6 +16,7 @@ datasource db {
 model User{
   id String @id
   email String
+  age   Int
   movies UserMovies[]
 }
 model Movie {

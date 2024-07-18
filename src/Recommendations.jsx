@@ -14,6 +14,7 @@ function Recommendations() {
   const [recommendations, setRecommendations] = useState();
   const { currentUser } = useAuth();
   const [movieCards2, setMovieCards2] = useState();
+  const [age, setAge] = useState();
   const movieCards = data?.results
     ?.slice(0, 20)
     .map((movie, index) => (
@@ -25,12 +26,24 @@ function Recommendations() {
       />
     ));
   function fetchRecommendations() {
-    fetch(`http://localhost:3000/ml/fetchRecs?userId=${currentUser.uid}`)
+    fetch(
+      `http://localhost:3000/ml/fetchRecs?userId=${currentUser.uid}&age=${age}`
+    )
       .then((response) => response.json())
       .then((data) => {
         setRecommendations(data);
       });
   }
+  useEffect(() => {
+    if (currentUser) {
+      fetch(`http://localhost:3000/users/userAge/${currentUser.uid}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setAge(data.age); // Output: { userId: 1, age: 25 }
+        });
+    }
+  }, [currentUser]);
+
   useEffect(() => {
     if (recommendations) {
       const fetchAllMovieDetails = async () => {

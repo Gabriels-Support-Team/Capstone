@@ -27,13 +27,16 @@ async function fetchRatings() {
 import { spawn } from "child_process";
 function processRatingsWithPython(req, res) {
   const userId = req.query.userId;
-  if (!userId) {
+  const age = req.query.age;
+
+  if (!userId || !age) {
     return res.status(400).send("UserId is required");
   }
   fetchRatings().then((ratings) => {
     const pythonProcess = spawn("python3", [
       "svd_movie_ratings.py",
       userId.toString(),
+      age.toString(),
     ]);
 
     pythonProcess.stdin.write(JSON.stringify(ratings));

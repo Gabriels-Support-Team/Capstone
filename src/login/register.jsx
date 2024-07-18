@@ -13,6 +13,7 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setconfirmPassword] = useState("");
   const [isRegistering, setIsRegistering] = useState(false);
+  const [age, setAge] = useState("");
 
   const { userLoggedIn } = useAuth();
 
@@ -31,7 +32,7 @@ const Register = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ email: email, id: user.uid }),
+          body: JSON.stringify({ email: email, id: user.uid, age: age }),
         });
         if (!response.ok) {
           throw new Error("Failed to create user in Prisma");
@@ -73,7 +74,6 @@ const Register = () => {
 
               <label>Email</label>
             </div>
-
             <div className="txtField">
               <input
                 disabled={isRegistering}
@@ -88,7 +88,6 @@ const Register = () => {
               <span></span>
               <label>Password</label>
             </div>
-
             <div className="txtField">
               <input
                 disabled={isRegistering}
@@ -104,6 +103,17 @@ const Register = () => {
               <label>Confirm Password</label>
             </div>
 
+            <div className="txtField">
+              <input
+                type="number"
+                autoComplete="off"
+                required
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+              />
+              <span></span>
+              <label>Age</label>
+            </div>
             <button
               className="loginButton"
               type="submit"
@@ -112,7 +122,7 @@ const Register = () => {
               {isRegistering ? "Signing Up..." : "Sign Up"}
             </button>
             <div className="signupLink">
-              Already have an account? {"   "}
+              Already have an account?
               <Link to={"/"}>Log In</Link>
             </div>
           </form>
