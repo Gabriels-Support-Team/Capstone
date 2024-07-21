@@ -86,7 +86,7 @@ def main():
         algo = SVD()
         algo.fit(trainset)
 
-        # Than predict ratings for all pairs (u, i) that are NOT in the training set.
+        # Then predict ratings for all pairs (u, i) that are NOT in the training set.
         testset = trainset.build_anti_testset()
         predictions = algo.test(testset)
 
