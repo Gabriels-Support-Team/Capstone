@@ -26,9 +26,7 @@ function Recommendations() {
       />
     ));
   function fetchRecommendations() {
-    fetch(
-      `http://localhost:3000/ml/fetchRecs?userId=${currentUser.uid}&age=${age}`
-    )
+    fetch(`http://localhost:3000/ml/fetchRecs?userId=${currentUser.uid}`)
       .then((response) => response.json())
       .then((data) => {
         setRecommendations(data);

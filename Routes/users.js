@@ -10,12 +10,14 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { email, id, age } = req.body;
+  const { email, id, age, gender, occupation } = req.body;
   const newUser = await prisma.user.create({
     data: {
       email,
       id,
-      age: parseInt(age),
+      age: Number(age),
+      gender: gender,
+      occupation: Number(occupation),
     },
   });
   res.json(newUser);

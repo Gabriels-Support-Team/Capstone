@@ -14,6 +14,8 @@ const Register = () => {
   const [confirmPassword, setconfirmPassword] = useState("");
   const [isRegistering, setIsRegistering] = useState(false);
   const [age, setAge] = useState("");
+  const [occupation, setOccupation] = useState("");
+  const [gender, setGender] = useState("");
 
   const { userLoggedIn } = useAuth();
 
@@ -32,7 +34,13 @@ const Register = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ email: email, id: user.uid, age: age }),
+          body: JSON.stringify({
+            email: email,
+            id: user.uid,
+            age: age,
+            gender: gender,
+            occupation: occupation,
+          }),
         });
         if (!response.ok) {
           throw new Error("Failed to create user in Prisma");
@@ -114,6 +122,43 @@ const Register = () => {
               <span></span>
               <label>Age</label>
             </div>
+            <select
+              className="select-container"
+              value={occupation}
+              onChange={(e) => setOccupation(e.target.value)}
+            >
+              <option value="">Occupation</option>
+              <option value="1">Academic/Educator</option>
+              <option value="2">Artist</option>
+              <option value="3">Clerical/Admin</option>
+              <option value="4">College/Grad Student</option>
+              <option value="5">Customer Service</option>
+              <option value="6">Doctor/Health Care</option>
+              <option value="7">Executive/Managerial</option>
+              <option value="8">Farmer</option>
+              <option value="9">Homemaker</option>
+              <option value="10">K-12 Student</option>
+              <option value="11">Lawyer</option>
+              <option value="12">Programmer</option>
+              <option value="13">Retired</option>
+              <option value="14">Sales/Marketing</option>
+              <option value="15">Scientist</option>
+              <option value="16">Self-Employed</option>
+              <option value="17">Technician/Engineer</option>
+              <option value="18">Tradesman/Craftsman</option>
+              <option value="19">Unemployed</option>
+              <option value="20">Writer</option>
+              <option value="0">Other</option>
+            </select>
+            <select
+              className="select-container"
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
+            >
+              <option value="">Gender</option>
+              <option value="M">Male</option>
+              <option value="F">Female</option>
+            </select>
             <button
               className="loginButton"
               type="submit"
