@@ -17,6 +17,8 @@ model User{
   id String @id
   email String
   age   Int
+  occupation Int
+  gender String
   movies UserMovies[]
 }
 model Movie {
