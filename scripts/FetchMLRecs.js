@@ -45,7 +45,6 @@ function processRatingsWithPython(req, res) {
   }
   Promise.all([fetchUserDetails(userId), fetchRatings()]).then(
     ([userDetails, ratings]) => {
-      console.log(userDetails);
       const pythonProcess = spawn("python3", [
         "svd_movie_ratings.py",
         userId.toString(),
@@ -56,9 +55,7 @@ function processRatingsWithPython(req, res) {
       pythonProcess.stdout.on("data", (data) => {
         outputData += data.toString();
       });
-      pythonProcess.stderr.on("data", (data) => {
-        console.error("Python Error:", data.toString()); // Log errors from Python script
-      });
+
       pythonProcess.on("close", (code) => {
         if (code !== 0) {
           return res.status(500).send("Failed to process ratings");
