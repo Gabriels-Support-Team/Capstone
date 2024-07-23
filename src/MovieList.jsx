@@ -22,6 +22,7 @@ function MovieList({
   const { currentUser } = useAuth();
 
   const navigate = useNavigate();
+  const [ranks, setRanks] = useState();
   const [data, setData] = useState({ results: [] });
   const [bookmarksData, setBookmarksData] = useState();
   const [searchQuery, setSearchQuery] = useState();
@@ -115,6 +116,27 @@ function MovieList({
         });
     }
   }, [currentUser]);
+  useEffect(() => {
+    if (currentUser) {
+      fetch(`http://localhost:3000/users/userMovies/${currentUser.uid}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setRanks(data.reverse());
+        })
+        .catch((error) =>
+          console.error("Error fetching ranked movies:", error)
+        );
+    }
+  }, [currentUser]);
+  const rankings = ranks
+    ?.slice(0, 5)
+    .map((movie, index) => (
+      <MovieCard
+        key={movie.movieId}
+        movieRating={movie.rating}
+        movieTitle={movie.title}
+      />
+    ));
   return (
     <div className="movieList">
       <CreateModal
@@ -190,7 +212,7 @@ function MovieList({
               : "movieListContainerActive"
           }
         >
-          {divs}
+          {rankings}
         </div>
       </div>
       <div className="bookmarks">
