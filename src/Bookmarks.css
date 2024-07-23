@@ -1,0 +1,7 @@
+.bookmarksContainer {
+  display: flex;
+  flex-wrap: wrap; /* Enable wrapping of items */
+  justify-content: center;
+  margin: 10px;
+  padding-top: 30px;
+}
