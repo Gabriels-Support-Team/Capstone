@@ -6,6 +6,7 @@ import CreateModal from "./Modal";
 import IncludeGenre from "./IncludeGenre";
 import { useNavigate } from "react-router-dom";
 import FriendCard from "./FriendCard";
+import { useAuth } from "./contexts/authContext";
 function MovieList({
   sortSelection,
   setFetchURL,
@@ -18,9 +19,11 @@ function MovieList({
   toggleWatched,
   watchedMovies,
 }) {
+  const { currentUser } = useAuth();
+
   const navigate = useNavigate();
   const [data, setData] = useState({ results: [] });
-
+  const [bookmarksData, setBookmarksData] = useState();
   const [searchQuery, setSearchQuery] = useState();
   const [showSearch, setSearchActive] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -92,6 +95,26 @@ function MovieList({
     setModalMovie(movie);
   }
   //return list of new MovieCard containers
+
+  const bookmarks = bookmarksData
+    ?.slice(0, 5)
+    .map((bookmark, index) => (
+      <MovieCard
+        key={bookmark.movieId}
+        movieRating={Number(bookmark.predictedRating)}
+        movieTitle={bookmark.movie.title}
+        movieId={bookmark.movieId}
+      />
+    ));
+  useEffect(() => {
+    if (currentUser) {
+      fetch(`http://localhost:3000/users/bookmarkedMovies/${currentUser.uid}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setBookmarksData(data);
+        });
+    }
+  }, [currentUser]);
   return (
     <div className="movieList">
       <CreateModal
@@ -184,7 +207,7 @@ function MovieList({
               : "movieListContainerActive"
           }
         >
-          {divs}
+          {bookmarks}
         </div>
       </div>
       <div className="Friends">
