@@ -4,7 +4,6 @@ import profile from "./profile.jpg";
 import "./Profile.css";
 import { useAuth } from "./contexts/authContext";
 
-// import "./Friends.css";
 function Profile() {
   const { currentUser } = useAuth();
   const [userInfo, setUserInfo] = useState();

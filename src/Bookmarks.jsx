@@ -8,7 +8,7 @@ function Bookmarks() {
   const { currentUser } = useAuth();
   const [data, setData] = useState();
   function unbookmarkMovie(movieId) {
-    const userId = currentUser.uid; // Assuming uid is directly accessible and not a promise
+    const userId = currentUser.uid;
     fetch("http://localhost:3000/users/bookmarkMovie", {
       method: "DELETE",
       headers: {
@@ -23,14 +23,9 @@ function Bookmarks() {
         return response.json(); // Assuming the server sends back some JSON response
       })
       .then((data) => {
-        console.log("Bookmark deleted", data);
-        // Optionally update local state to reflect the change
         setData((prevData) =>
           prevData.filter((bookmark) => bookmark.movieId !== movieId)
         );
-      })
-      .catch((error) => {
-        console.error("Error deleting bookmark:", error);
       });
   }
   const movieCards = data?.map((bookmark, index) => (
