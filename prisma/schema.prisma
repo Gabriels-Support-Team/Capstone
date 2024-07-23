@@ -20,12 +20,15 @@ model User{
   occupation Int
   gender String
   movies UserMovies[]
+  bookmarks BookmarkedMovie[]
 }
 model Movie {
   movieId  Int  @id
   title    String
   genres   String
   users    UserMovies[]
+  bookmarks   BookmarkedMovie[]
+
 }
 model UserMovies {
   user   User   @relation(fields: [userId], references: [id])
@@ -34,5 +37,14 @@ model UserMovies {
   movieId Int
   rating Float
   comparisons Int    @default(0)
+  @@id([userId, movieId])
+}
+
+model BookmarkedMovie {
+  user     User   @relation(fields: [userId], references: [id])
+  userId   String
+  movie    Movie  @relation(fields: [movieId], references: [movieId])
+  movieId  Int
+  predictedRating Float?
   @@id([userId, movieId])
 }

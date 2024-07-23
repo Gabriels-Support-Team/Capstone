@@ -60,6 +60,58 @@ router.post("/logMovie", async (req, res) => {
   res.json(upsertMovie);
 });
 
+router.post("/bookmarkMovie", (req, res) => {
+  const { userId, movieId, predictedRating } = req.body;
+  prisma.bookmarkedMovie
+    .upsert({
+      where: {
+        userId_movieId: {
+          userId: userId,
+          movieId: movieId,
+        },
+      },
+      update: {
+        predictedRating: predictedRating,
+      },
+      create: {
+        userId: userId,
+        movieId: movieId,
+        predictedRating: predictedRating,
+      },
+    })
+    .then((data) => {
+      res.json(data);
+    });
+});
+router.delete("/bookmarkMovie", (req, res) => {
+  const { userId, movieId } = req.body;
+  prisma.bookmarkedMovie
+    .delete({
+      where: {
+        userId_movieId: {
+          userId: userId,
+          movieId: movieId,
+        },
+      },
+    })
+    .then((data) => {
+      res.json(data);
+    });
+});
+router.get("/bookmarkedMovies/:userId", (req, res) => {
+  const userId = req.params.userId;
+  prisma.bookmarkedMovie
+    .findMany({
+      where: { userId: userId },
+      include: {
+        movie: true,
+      },
+    })
+    .then((data) => {
+      res.json(data);
+    });
+});
+
 router.get("/userMovies/:userId", async (req, res) => {
   const userId = req.params.userId;
   try {
@@ -118,5 +170,20 @@ router.get("/userAge/:userId", async (req, res) => {
         res.status(404).send("User not found");
       }
     });
+});
+router.get("/:userId", (req, res) => {
+  const { userId } = req.params;
+  prisma.user
+    .findUnique({
+      where: { id: userId },
+      select: {
+        email: true,
+        id: true,
+        age: true,
+        gender: true,
+        occupation: true,
+      },
+    })
+    .then((data) => res.json({ data }));
 });
 export default router;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./MovieCard.css";
 import { CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
@@ -13,7 +13,13 @@ function MovieCard({
   likedMovies,
   toggleWatched,
   watchedMovies,
+  bookmarkMovie,
+  includeBookmark,
+  movieId,
+  unbookmark,
+  includeUnbookmark,
 }) {
+  const [bookmarked, setBookmarked] = useState(false);
   //toggles movie as watched
   const toggleWathchedInternal = (event) => {
     toggleWatched(movieTitle);
@@ -32,6 +38,30 @@ function MovieCard({
         style={{ borderColor: ratingColor, color: ratingColor }}
       >
         {movieRating.toFixed(2)}
+      </div>
+      <div>
+        {includeBookmark && (
+          <button
+            onClick={(e) => {
+              bookmarkMovie(movieId, movieRating);
+              setBookmarked(true);
+            }}
+          >
+            {bookmarked ? "Bookmarked!" : "Bookmark"}
+          </button>
+        )}
+      </div>
+      <div>
+        {includeUnbookmark && !bookmarked && (
+          <button
+            onClick={(e) => {
+              unbookmark(movieId);
+              setBookmarked(true);
+            }}
+          >
+            X
+          </button>
+        )}
       </div>
     </div>
   );

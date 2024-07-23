@@ -32,15 +32,16 @@ function Recommendations() {
         setRecommendations(data);
       });
   }
-  useEffect(() => {
-    if (currentUser) {
-      fetch(`http://localhost:3000/users/userAge/${currentUser.uid}`)
-        .then((response) => response.json())
-        .then((data) => {
-          setAge(data.age); // Output: { userId: 1, age: 25 }
-        });
-    }
-  }, [currentUser]);
+  function bookmarkMovie(movieId, predictedRating) {
+    const userId = currentUser.uid;
+    fetch("http://localhost:3000/users/bookmarkMovie", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId, movieId, predictedRating }),
+    });
+  }
 
   useEffect(() => {
     if (recommendations) {
@@ -59,6 +60,9 @@ function Recommendations() {
                 key={movie.itemID}
                 movieRating={movie.rating * 2}
                 movieTitle={details.title}
+                bookmarkMovie={bookmarkMovie}
+                includeBookmark={true}
+                movieId={movie.itemID}
               />
             );
           })
@@ -94,7 +98,7 @@ function Recommendations() {
               {highlightedMovie.original_title}
               <div className="releaseDate">{highlightedMovie.release_date}</div>
               <div className="overview">{highlightedMovie.overview}</div>
-              <div className="releaseDate">Our Algorithm's curated rating:</div>
+              <div className="releaseDate">Audience rating:</div>
               <div
                 style={{ borderColor: ratingColor, color: ratingColor }}
                 className="vote-average"
