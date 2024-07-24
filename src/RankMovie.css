@@ -3,10 +3,9 @@ p {
   color: white;
 }
 
-
 /* General body and container styles */
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   background-color: #f4f4f9;
   color: #333;
   margin: 0;
@@ -22,7 +21,7 @@ body {
   color: white;
   background-color: #ffffff;
   border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   padding: 20px;
   margin: 130px auto;
   width: 80%;
@@ -45,8 +44,6 @@ button {
   transition: background-color 0.3s;
 }
 
-
-
 h2 {
   color: #333;
   font-size: 24px;
@@ -55,4 +52,14 @@ h2 {
 p {
   font-size: 18px;
   color: #666;
+}
+
+.loggedMessage {
+  color: black;
+  margin: 20px;
+}
+.loadingBar {
+  width: 100%;
+  background-color: #ddd;
+  border-radius: 10px;
 }
