@@ -19,8 +19,7 @@ function RankMovie() {
   const { movie: newMovie } = location.state || {};
   const [rating, setRating] = useState(null);
   const [newUserMovie, setNewUserMovie] = useState();
-  const [totalMovies, setTotalMovies] = useState(100000000);
-  const [moviesLeft, setMoviesLeft] = useState(0);
+  const [totalMovies, setTotalMovies] = useState();
   const [loadingPercentage, setLoadingPercentage] = useState(0);
   // Fetch user's movies excluding the new movie to be ranked
   useEffect(() => {
