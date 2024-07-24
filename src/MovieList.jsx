@@ -58,7 +58,7 @@ function MovieList({
       .catch((error) => console.error("Error fetching data:", error));
   }, [page, fetchURL, sortSelection, genreSelection]);
   //load API data into movieCard containers
-  const divs = data?.results?.slice(0, 6).map((movie, index) => (
+  const divs = data?.results?.slice(0, 5).map((movie, index) => (
     <MovieCard
       key={movie.id}
       movieImage={`https://image.tmdb.org/t/p/w342${movie?.poster_path}`}
@@ -97,29 +97,79 @@ function MovieList({
   }
   //return list of new MovieCard containers
 
-  const bookmarks = bookmarksData
-    ?.slice(0, 5)
-    .map((bookmark, index) => (
+  const bookmarks = bookmarksData?.slice(0, 5).map((bookmark, index) => {
+    return (
       <MovieCard
         key={bookmark.movieId}
+        movieImage={`https://image.tmdb.org/t/p/w342${bookmark.movieDetails?.poster_path}`}
         movieRating={Number(bookmark.predictedRating)}
         movieTitle={bookmark.movie.title}
         movieId={bookmark.movieId}
+        openModal={() => {
+          populateModal(bookmark.movie);
+        }}
       />
-    ));
+    );
+  });
+
   useEffect(() => {
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,
+      },
+    };
+
     if (currentUser) {
       fetch(`http://localhost:3000/users/bookmarkedMovies/${currentUser.uid}`)
         .then((response) => response.json())
+        .then((bookmarks) => {
+          const fetches = bookmarks.map((bookmark) => {
+            const tmdbId = bookmark.movie.tmdbId;
+            return fetch(
+              `https://api.themoviedb.org/3/movie/${tmdbId}?language=en-US`,
+              options
+            )
+              .then((response) => response.json())
+              .then((movieDetails) => ({
+                ...bookmark,
+                movieDetails,
+              }));
+          });
+          return Promise.all(fetches);
+        })
         .then((data) => {
           setBookmarksData(data);
         });
     }
   }, [currentUser]);
   useEffect(() => {
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,
+      },
+    };
     if (currentUser) {
       fetch(`http://localhost:3000/users/userMovies/${currentUser.uid}`)
         .then((response) => response.json())
+        .then((bookmarks) => {
+          const fetches = bookmarks.map((bookmark) => {
+            const tmdbId = bookmark.tmdbId;
+            return fetch(
+              `https://api.themoviedb.org/3/movie/${tmdbId}?language=en-US`,
+              options
+            )
+              .then((response) => response.json())
+              .then((movieDetails) => ({
+                ...bookmark,
+                movieDetails,
+              }));
+          });
+          return Promise.all(fetches);
+        })
         .then((data) => {
           setRanks(data.reverse());
         })
@@ -128,15 +178,19 @@ function MovieList({
         );
     }
   }, [currentUser]);
-  const rankings = ranks
-    ?.slice(0, 5)
-    .map((movie, index) => (
+  const rankings = ranks?.slice(0, 5).map((movie, index) => {
+    return (
       <MovieCard
         key={movie.movieId}
         movieRating={movie.rating}
+        movieImage={`https://image.tmdb.org/t/p/w342${movie.movieDetails?.poster_path}`}
         movieTitle={movie.title}
+        openModal={() => {
+          populateModal(movie);
+        }}
       />
-    ));
+    );
+  });
   return (
     <div className="movieList">
       <CreateModal
