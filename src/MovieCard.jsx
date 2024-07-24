@@ -81,6 +81,7 @@ function MovieCard({
             onClick={(e) => {
               unbookmark(movieId);
               setBookmarked(true);
+              e.stopPropagation();
             }}
           >
             X

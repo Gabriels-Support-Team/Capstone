@@ -20,6 +20,27 @@ function MyRankings({ movies }) {
     }
   }, [currentUser]);
 
+  function deleteRanking(movieId) {
+    const userId = currentUser.uid;
+    fetch("http://localhost:3000/users/userMovie", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId, movieId }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to delete the bookmark");
+        }
+        return response.json(); // Assuming the server sends back some JSON response
+      })
+      .then((data) => {
+        setData((prevData) =>
+          prevData.filter((bookmark) => bookmark.movieId !== movieId)
+        );
+      });
+  }
   return (
     <div className="rankingsPage">
       <FlixterHeader></FlixterHeader>
@@ -29,6 +50,8 @@ function MyRankings({ movies }) {
       <div id="rankingscontainer">
         {data?.map((movie, index) => (
           <div className="row">
+            <button onClick={() => deleteRanking(movie.movieId)}>X</button>
+
             <h1 className="rank">{index + 1}</h1>
 
             <div className="name">{movie.title}</div>
