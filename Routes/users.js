@@ -98,6 +98,21 @@ router.delete("/bookmarkMovie", (req, res) => {
       res.json(data);
     });
 });
+router.delete("/userMovie", (req, res) => {
+  const { userId, movieId } = req.body;
+  prisma.userMovies
+    .delete({
+      where: {
+        userId_movieId: {
+          userId: userId,
+          movieId: movieId,
+        },
+      },
+    })
+    .then((data) => {
+      res.json(data);
+    });
+});
 router.get("/bookmarkedMovies/:userId", (req, res) => {
   const userId = req.params.userId;
   prisma.bookmarkedMovie

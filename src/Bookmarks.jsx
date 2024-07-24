@@ -30,7 +30,7 @@ function Bookmarks() {
         if (!response.ok) {
           throw new Error("Failed to delete the bookmark");
         }
-        return response.json(); // Assuming the server sends back some JSON response
+        return response.json();
       })
       .then((data) => {
         setData((prevData) =>
