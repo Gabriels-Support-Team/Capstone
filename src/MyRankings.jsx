@@ -50,6 +50,8 @@ function MyRankings({ movies }) {
       <div id="rankingscontainer">
         {data?.map((movie, index) => (
           <div className="row">
+            <button onClick={() => deleteRanking(movie.movieId)}>X</button>
+
             <h1 className="rank">{index + 1}</h1>
 
             <div className="name">{movie.title}</div>
@@ -60,7 +62,6 @@ function MyRankings({ movies }) {
               }}
               className="score"
             >
-              <button onClick={() => deleteRanking(movie.movieId)}>X</button>
               {movie.rating.toFixed(2)}
             </div>
           </div>
