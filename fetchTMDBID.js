@@ -37,9 +37,6 @@ async function fetchAndUpdateMovie(movie) {
         tmdbId: movieData.id,
       },
     });
-    console.log(`Updated movie: ${movie.title}`);
-  } else {
-    console.log(`No data found for movie: ${movie.title}`);
   }
 }
 
