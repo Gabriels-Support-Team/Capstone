@@ -131,6 +131,7 @@ router.get("/userMovies/:userId", async (req, res) => {
         genres: um.movie.genres,
         rating: um.rating,
         comparisons: um.comparisons,
+        tmdbId: um.movie.tmdbId,
       }))
     );
   } catch (error) {

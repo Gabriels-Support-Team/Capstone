@@ -27,6 +27,7 @@ model Movie {
   title    String
   genres   String
   users    UserMovies[]
+  tmdbId     Int?   // Optional field for TMDb ID
   bookmarks   BookmarkedMovie[]
 
 }

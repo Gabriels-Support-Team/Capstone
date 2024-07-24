@@ -3,10 +3,20 @@ import FlixterHeader from "./FlixterHeader";
 import "./Bookmarks.css";
 import MovieCard from "./MovieCard";
 import { useAuth } from "./contexts/authContext";
-
+import CreateModal from "./Modal";
 function Bookmarks() {
   const { currentUser } = useAuth();
   const [data, setData] = useState();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedMovie, setSelectedMovie] = useState(null);
+  const openModal = (movie) => {
+    setSelectedMovie(movie);
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedMovie(null);
+  };
   function unbookmarkMovie(movieId) {
     const userId = currentUser.uid;
     fetch("http://localhost:3000/users/bookmarkMovie", {
@@ -36,6 +46,8 @@ function Bookmarks() {
       movieId={bookmark.movieId}
       unbookmark={unbookmarkMovie}
       includeUnbookmark={true}
+      tmdbId={bookmark.movie.tmdbId}
+      openModal={() => openModal(bookmark.movie)}
     />
   ));
   useEffect(() => {
@@ -50,6 +62,14 @@ function Bookmarks() {
   return (
     <div className="rankingsPage">
       <FlixterHeader></FlixterHeader>
+      {selectedMovie && (
+        <CreateModal
+          isOpen={isModalOpen}
+          close={closeModal}
+          movie={selectedMovie}
+        />
+      )}
+
       <div className="rankingsTitle">Bookmarks</div>
       <div className="sub">Your Next Watch?</div>
       <div className="bookmarksContainer">{movieCards}</div>
