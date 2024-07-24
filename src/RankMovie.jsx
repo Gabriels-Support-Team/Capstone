@@ -19,6 +19,8 @@ function RankMovie() {
   const { movie: newMovie } = location.state || {};
   const [rating, setRating] = useState(null);
   const [newUserMovie, setNewUserMovie] = useState();
+  const [totalMovies, setTotalMovies] = useState();
+  const [loadingPercentage, setLoadingPercentage] = useState(0);
   // Fetch user's movies excluding the new movie to be ranked
   useEffect(() => {
     if (currentUser) {
@@ -30,6 +32,7 @@ function RankMovie() {
           );
           setUserMovies(filteredMovies);
           setHigh(filteredMovies.length - 1);
+          setTotalMovies(filteredMovies.length);
         })
         .catch((error) =>
           console.error("Error fetching ranked movies:", error)
@@ -54,6 +57,10 @@ function RankMovie() {
       // Call to backend to update rankings
     } else {
       setMid(Math.floor((low + high) / 2));
+      setLoadingPercentage(
+        Math.max((1 - (high - low) / totalMovies) * 100 - 10, 0)
+      );
+      console.log(Math.max((1 - (high - low) / totalMovies) * 100 - 10, 0));
     }
   }, [low, high, newMovie]);
   // Function to update movie ratings in the backend
@@ -191,8 +198,19 @@ function RankMovie() {
     return (
       <div>
         <FlixterHeader />
+
         <div className="comparisonContainer">
-          {newMovie.title} has been ranked!
+          <div className="loadingBar">
+            <div
+              style={{
+                height: "24px",
+                width: `100%`,
+                backgroundColor: "green",
+                borderRadius: "10px",
+              }}
+            />
+          </div>
+          <div className="loggedMessage">{newMovie.title} has been ranked!</div>
           <button onClick={() => navigate("../myRankings")}>
             See Rankings
           </button>
@@ -210,7 +228,18 @@ function RankMovie() {
     return (
       <>
         <FlixterHeader />
+
         <div className="comparisonContainer">
+          <div className="loadingBar">
+            <div
+              style={{
+                height: "24px",
+                width: `${loadingPercentage}%`,
+                backgroundColor: "green",
+                borderRadius: "10px",
+              }}
+            />
+          </div>
           <p>How was the Movie?</p>
           <div className="buttonContainer">
             <button
@@ -246,6 +275,16 @@ function RankMovie() {
     <div>
       <FlixterHeader />
       <div className="comparisonContainer">
+        <div className="loadingBar">
+          <div
+            style={{
+              height: "24px",
+              width: `${loadingPercentage}%`,
+              backgroundColor: "green",
+              borderRadius: "10px",
+            }}
+          />
+        </div>
         <motion.div
           initial={{ opacity: 0, x: 100 }}
           animate={{ opacity: 1, x: 0 }}
