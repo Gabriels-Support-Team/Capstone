@@ -20,3 +20,4 @@ app.use("/users", userRoutes);
 
 app.use("/movies", movieRoutes);
 app.use("/ml", mlRoutes);
+app.use("/uploads", express.static("uploads"));

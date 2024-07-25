@@ -1,9 +1,23 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
-
+import multer from "multer";
 const router = express.Router();
 const prisma = new PrismaClient();
+const upload = multer({ dest: "uploads/" });
+router.post(
+  "/upload-profile-pic",
+  upload.single("profilePic"),
+  async (req, res) => {
+    const { userId } = req.body;
+    const profilePicUrl = req.file.path;
 
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: { profilePic: profilePicUrl },
+    });
+    res.json(user);
+  }
+);
 router.get("/", async (req, res) => {
   const users = await prisma.user.findMany();
   res.json(users);
@@ -198,8 +212,16 @@ router.get("/:userId", (req, res) => {
         age: true,
         gender: true,
         occupation: true,
+        profilePic: true,
       },
     })
-    .then((data) => res.json({ data }));
+    .then((user) => {
+      if (!user) {
+        res.status(404).send("User not found");
+        return;
+      }
+      user.profilePic = user.profilePic || "path/to/default/image.jpg";
+      res.json({ data: user });
+    });
 });
 export default router;
