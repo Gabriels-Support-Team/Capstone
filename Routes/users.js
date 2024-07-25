@@ -222,10 +222,6 @@ router.get("/:userId", (req, res) => {
       }
       user.profilePic = user.profilePic || "path/to/default/image.jpg";
       res.json({ data: user });
-    })
-    .catch((error) => {
-      console.error("Error fetching user data:", error);
-      res.status(500).send("Error fetching user data");
     });
 });
 export default router;

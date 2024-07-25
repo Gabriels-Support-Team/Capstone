@@ -17,7 +17,6 @@ function FlixterHeader({ likedMovies, watchedMovies }) {
         .then((response) => response.json())
         .then((data) => {
           setUserInfo(data);
-          console.log(data);
         });
     }
   }, [currentUser]);
