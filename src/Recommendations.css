@@ -12,7 +12,7 @@ h1 {
   margin-bottom: 20px;
 }
 .recTitle {
-  padding-top: 100px;
+  padding-top: 75px;
   text-align: center;
   font-size: 60px;
 }
@@ -35,4 +35,40 @@ h1 {
 }
 .releaseDate {
   font-size: 30px;
+}
+.fetchButton {
+  width: 100%;
+  color: black;
+}
+.loadingContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 100px;
+}
+.buttonContain {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 80px;
+  margin-bottom: 50px;
+}
+.buttonContain button {
+  width: 50%;
+  height: 100%;
+}
+.newMovieTitle {
+  text-align: center;
+  font-size: 40px;
+  margin-top: 200px;
+}
+.personalRecs {
+  text-align: center;
+  font-size: 40px;
+}
+.pageContainer {
+  margin-left: 7%;
+  margin-right: 7%;
 }
