@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import MovieCard from "./MovieCard";
 import FlixterHeader from "./FlixterHeader";
 import { getRatingColor } from "./utils";
+import { ThreeCircles } from "/node_modules/.vite/deps/react-loader-spinner.js";
 
 function Recommendations() {
   const location = useLocation();
@@ -15,6 +16,7 @@ function Recommendations() {
   const { currentUser } = useAuth();
   const [movieCards2, setMovieCards2] = useState();
   const [age, setAge] = useState();
+  const [loading, setLoading] = useState(false);
   const movieCards = data?.results
     ?.slice(0, 20)
     .map((movie, index) => (
@@ -26,10 +28,12 @@ function Recommendations() {
       />
     ));
   function fetchRecommendations() {
+    setLoading(true);
     fetch(`http://localhost:3000/ml/fetchRecs?userId=${currentUser.uid}`)
       .then((response) => response.json())
       .then((data) => {
         setRecommendations(data);
+        setLoading(false);
       });
   }
   function bookmarkMovie(movieId, predictedRating) {
@@ -76,42 +80,67 @@ function Recommendations() {
   return (
     <>
       <FlixterHeader></FlixterHeader>
-      <h1 className="recTitle">Personalized Recommendations</h1>;
-      <button
-        onClick={() => {
-          fetchRecommendations();
-        }}
-      >
-        FETCH RECS
-      </button>
-      <div className="recommendationsContainer">{movieCards2}</div>
-      {highlightedMovie ? (
-        <>
-          <div className="highlightedMovie">
-            <img
-              className="highlightedMoviePic"
-              src={`https://image.tmdb.org/t/p/w342${highlightedMovie.backdrop_path}`}
-              alt={highlightedMovie.original_title}
-            />
-            <div className="highlightedMovieText">
-              Top Pick: <br></br>
-              {highlightedMovie.original_title}
-              <div className="releaseDate">{highlightedMovie.release_date}</div>
-              <div className="overview">{highlightedMovie.overview}</div>
-              <div className="releaseDate">Audience rating:</div>
-              <div
-                style={{ borderColor: ratingColor, color: ratingColor }}
-                className="vote-average"
-              >
-                {highlightedMovie.vote_average}
+      <div className="pageContainer">
+        <h1 className="recTitle">Personalized Recommendations</h1>
+        <div className="buttonContain">
+          <button
+            onClick={() => {
+              fetchRecommendations();
+            }}
+          >
+            FETCH RECOMMENDATIONS
+          </button>
+        </div>
+        {movieCards2 && !loading && (
+          <h1 className="personalRecs">
+            Movies Recommended Just for You, Based on Your Viewing History
+          </h1>
+        )}
+        {!loading && (
+          <div className="recommendationsContainer">{movieCards2}</div>
+        )}
+        {highlightedMovie && !loading ? (
+          <>
+            <h1 className="newMovieTitle">New Movies in Theaters</h1>
+
+            <div className="highlightedMovie">
+              <img
+                className="highlightedMoviePic"
+                src={`https://image.tmdb.org/t/p/w342${highlightedMovie.backdrop_path}`}
+                alt={highlightedMovie.original_title}
+              />
+              <div className="highlightedMovieText">
+                Top Pick: <br></br>
+                {highlightedMovie.original_title}
+                <div className="releaseDate">
+                  {highlightedMovie.release_date}
+                </div>
+                <div className="overview">{highlightedMovie.overview}</div>
+                <div className="releaseDate">Audience rating:</div>
+                <div
+                  style={{ borderColor: ratingColor, color: ratingColor }}
+                  className="vote-average"
+                >
+                  {highlightedMovie.vote_average}
+                </div>
               </div>
             </div>
+            <div className="recommendationsContainer">{movieCards}</div>
+          </>
+        ) : (
+          <div className="loadingContainer">
+            <ThreeCircles
+              visible={true}
+              height="250"
+              width="250"
+              color="#f8c873"
+              ariaLabel="three-circles-loading"
+              wrapperStyle={{}}
+              wrapperClass=""
+            />
           </div>
-          <div className="recommendationsContainer">{movieCards}</div>
-        </>
-      ) : (
-        <></>
-      )}
+        )}
+      </div>
     </>
   );
 }

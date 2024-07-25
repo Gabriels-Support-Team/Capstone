@@ -271,7 +271,7 @@ function MovieList({
       </div>
       <div className="bookmarks">
         <div className="recommendationsBanner">
-          <h1>Bookmarked Movies</h1>
+          <h1>Bookmarked Recommendations</h1>
           <p className="showAll" onClick={() => navigate("../Bookmarks")}>
             Show all
           </p>
