@@ -1,12 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import { doSignOut } from "./firebase/auth";
 import "./FlixterHeader.css";
 import { NavLink } from "react-router-dom";
 import logo from "./logo.png";
+import { useAuth } from "./contexts/authContext";
 
 function FlixterHeader({ likedMovies, watchedMovies }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [userInfo, setUserInfo] = useState();
+  const { currentUser } = useAuth();
+  useEffect(() => {
+    if (currentUser) {
+      fetch(`http://localhost:3000/users/${currentUser.uid}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setUserInfo(data);
+          console.log(data);
+        });
+    }
+  }, [currentUser]);
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -33,6 +47,8 @@ function FlixterHeader({ likedMovies, watchedMovies }) {
 
       <div
         className="logOut"
+        onMouseEnter={() => setShowPopup(true)}
+        onMouseLeave={() => setShowPopup(false)}
         onClick={() => {
           doSignOut().then(() => {
             navigate("/");
@@ -41,6 +57,15 @@ function FlixterHeader({ likedMovies, watchedMovies }) {
       >
         Logout
       </div>
+      {showPopup && (
+        <div className="emailPopup">
+          <img
+            className="profileImg"
+            src={`http://localhost:3000/${userInfo?.data?.profilePic}`}
+            alt={`${userInfo?.data.email}`}
+          />
+        </div>
+      )}
     </header>
   );
 }

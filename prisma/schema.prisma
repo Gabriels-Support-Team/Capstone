@@ -21,6 +21,7 @@ model User{
   gender String
   movies UserMovies[]
   bookmarks BookmarkedMovie[]
+  profilePic  String? 
 }
 model Movie {
   movieId  Int  @id
