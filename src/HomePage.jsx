@@ -62,23 +62,6 @@ const HomePage = () => {
     <div className="App">
       <FlixterHeader likedMovies={likedMovies} watchedMovies={watchedMovies} />
       <div style={{ paddingTop: "100px" }}>
-        <div className="selectContainer">
-          <SortBy
-            className="select"
-            sortSelection={sortSelection}
-            setSortSelection={setSortSelection}
-            setFetchURL={setFetchURL}
-            setPage={setPage}
-          />
-          <IncludeGenre
-            className="select"
-            setGenreSelection={setGenreSelection}
-            genreSelection={genreSelection}
-            setFetchURL={setFetchURL}
-            genres={genres}
-            setPage={setPage}
-          />
-        </div>
         <MovieList
           sortSelection={sortSelection}
           fetchURL={fetchURL}
