@@ -6,6 +6,7 @@ import MovieCard from "./MovieCard";
 import FlixterHeader from "./FlixterHeader";
 import { getRatingColor } from "./utils";
 import { ThreeCircles } from "react-loader-spinner";
+import { AMOUNT_RECS } from "./config";
 
 function Recommendations() {
   const location = useLocation();
@@ -17,8 +18,9 @@ function Recommendations() {
   const [movieCards2, setMovieCards2] = useState();
   const [age, setAge] = useState();
   const [loading, setLoading] = useState(false);
+
   const movieCards = data?.results
-    ?.slice(0, 20)
+    ?.slice(0, AMOUNT_RECS)
     .map((movie, index) => (
       <MovieCard
         key={movie.id}

@@ -41,9 +41,9 @@ const Login = () => {
       <div className="loginContainer">
         <div className="center">
           {userLoggedIn && <Navigate to={"/home"} replace={true} />}
-          <div>
+          <>
             <h1>Welcome Back</h1>
-          </div>
+          </>
           <form onSubmit={onSubmit}>
             <div className="txtField">
               <input

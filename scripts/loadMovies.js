@@ -11,7 +11,7 @@ function loadMovies() {
     if (movieId && title && genres) {
       return prisma.movie.create({
         data: {
-          movieId: parseInt(movieId),
+          movieId: Number(movieId),
           title,
           genres,
         },
@@ -24,12 +24,7 @@ function loadMovies() {
 }
 
 loadMovies()
-  .then((results) => {
-    console.log("Movies loaded:", results);
-  })
-  .catch((error) => {
-    console.error("Error loading movies:", error);
-  })
+  .then((results) => {})
   .finally(() => {
     prisma.$disconnect();
   });
