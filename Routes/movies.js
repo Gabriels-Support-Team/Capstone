@@ -31,7 +31,7 @@ router.get("/:id", (req, res) => {
   const { id } = req.params;
   prisma.movie
     .findFirst({
-      where: { movieId: parseInt(id) },
+      where: { movieId: Number(id) },
     })
     .then((movie) => {
       if (movie) {

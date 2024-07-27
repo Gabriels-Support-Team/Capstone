@@ -3,6 +3,7 @@ import FlixterHeader from "./FlixterHeader";
 import "./MovieLogger.css";
 import { useAuth } from "./contexts/authContext";
 import MovieSearch from "./MovieSearch";
+import { GOOD_RATING, OK_RATING, BAD_RATING } from "./config";
 
 function MovieLogger() {
   const { currentUser } = useAuth();
@@ -27,13 +28,13 @@ function MovieLogger() {
   }, [currentUser, moviesLogged]);
   const handleMovieLogged = (searchId) => {
     setMoviesLogged(moviesLogged + 1);
-    if (searchId == 1) {
+    if (searchId === 1) {
       setShowFirstSearch(false);
     }
-    if (searchId == 2) {
+    if (searchId === 2) {
       setShowSecondSearch(false);
     }
-    if (searchId == 3) {
+    if (searchId === 3) {
       setShowThirdSearch(false);
     }
   };
@@ -53,7 +54,7 @@ function MovieLogger() {
                 What is one movie that you really enjoyed?
               </div>
               <MovieSearch
-                initialRating={7.5}
+                initialRating={GOOD_RATING}
                 onMovieLogged={() => {
                   handleMovieLogged(1);
                 }}
@@ -67,7 +68,7 @@ function MovieLogger() {
                 What is one movie that you did not like?
               </div>
               <MovieSearch
-                initialRating={2.5}
+                initialRating={BAD_RATING}
                 onMovieLogged={() => {
                   handleMovieLogged(2);
                 }}
@@ -81,7 +82,7 @@ function MovieLogger() {
               </div>
 
               <MovieSearch
-                initialRating={5}
+                initialRating={OK_RATING}
                 onMovieLogged={() => {
                   handleMovieLogged(3);
                 }}

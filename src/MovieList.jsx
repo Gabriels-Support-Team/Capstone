@@ -6,6 +6,9 @@ import IncludeGenre from "./IncludeGenre";
 import { useNavigate } from "react-router-dom";
 import FriendCard from "./FriendCard";
 import { useAuth } from "./contexts/authContext";
+import { AMOUNT_MOVIES } from "./config";
+import { AMOUNT_USERS } from "./config";
+
 function MovieList({
   sortSelection,
   setFetchURL,
@@ -57,7 +60,7 @@ function MovieList({
       });
   }, [page, fetchURL, sortSelection, genreSelection]);
   //load API data into movieCard containers
-  const divs = data?.results?.slice(0, 5).map((movie, index) => (
+  const Cards = data?.results?.slice(0, AMOUNT_MOVIES).map((movie, index) => (
     <MovieCard
       key={movie.id}
       movieImage={`https://image.tmdb.org/t/p/w342${movie?.poster_path}`}
@@ -96,20 +99,22 @@ function MovieList({
   }
   //return list of new MovieCard containers
 
-  const bookmarks = bookmarksData?.slice(0, 5).map((bookmark, index) => {
-    return (
-      <MovieCard
-        key={bookmark.movieId}
-        movieImage={`https://image.tmdb.org/t/p/w342${bookmark.movieDetails?.poster_path}`}
-        movieRating={Number(bookmark.predictedRating)}
-        movieTitle={bookmark.movie.title}
-        movieId={bookmark.movieId}
-        openModal={() => {
-          populateModal(bookmark.movie);
-        }}
-      />
-    );
-  });
+  const bookmarks = bookmarksData
+    ?.slice(0, AMOUNT_MOVIES)
+    .map((bookmark, index) => {
+      return (
+        <MovieCard
+          key={bookmark.movieId}
+          movieImage={`https://image.tmdb.org/t/p/w342${bookmark.movieDetails?.poster_path}`}
+          movieRating={Number(bookmark.predictedRating)}
+          movieTitle={bookmark.movie.title}
+          movieId={bookmark.movieId}
+          openModal={() => {
+            populateModal(bookmark.movie);
+          }}
+        />
+      );
+    });
 
   useEffect(() => {
     const options = {
@@ -174,7 +179,7 @@ function MovieList({
         });
     }
   }, [currentUser]);
-  const rankings = ranks?.slice(0, 5).map((movie, index) => {
+  const rankings = ranks?.slice(0, AMOUNT_MOVIES).map((movie, index) => {
     return (
       <MovieCard
         key={movie.movieId}
@@ -254,7 +259,7 @@ function MovieList({
               : "movieListContainerActive"
           }
         >
-          {divs}
+          {Cards}
         </div>
       </div>
       <div className="My dynamic rankings">
@@ -305,7 +310,7 @@ function MovieList({
               : "movieListContainerActive"
           }
         >
-          {friends?.initiatedFriends.slice(0, 3).map((friend) => (
+          {friends?.initiatedFriends.slice(0, AMOUNT_USERS).map((friend) => (
             <FriendCard email={friend.email} profilePic={friend.profilePic} />
           ))}
         </div>
