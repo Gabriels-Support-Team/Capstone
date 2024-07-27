@@ -29,6 +29,7 @@ function MovieList({
   const [showSearch, setSearchActive] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMovie, setModalMovie] = useState();
+  const [friends, setFriends] = useState();
   if (!import.meta.env.VITE_API_KEY) {
     console.error("API key is undefined. Check your environment variables.");
   }
@@ -191,6 +192,15 @@ function MovieList({
       />
     );
   });
+  useEffect(() => {
+    if (currentUser) {
+      const encodedQuery = encodeURIComponent(currentUser.uid);
+
+      fetch(`http://localhost:3000/users/getFriends?userId=${encodedQuery}`)
+        .then((response) => response.json())
+        .then((data) => setFriends(data));
+    }
+  }, [currentUser]);
   return (
     <div className="movieList">
       <CreateModal
@@ -300,11 +310,9 @@ function MovieList({
               : "movieListContainerActive"
           }
         >
-          <FriendCard />
-          <FriendCard />
-
-          <FriendCard />
-          <FriendCard />
+          {friends?.initiatedFriends.slice(0, 3).map((friend) => (
+            <FriendCard email={friend.email} profilePic={friend.profilePic} />
+          ))}
         </div>
       </div>
     </div>

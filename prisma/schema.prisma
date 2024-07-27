@@ -22,6 +22,15 @@ model User{
   movies UserMovies[]
   bookmarks BookmarkedMovie[]
   profilePic  String? 
+  friends     Friend[] @relation("UserFriends")
+  friendOf    Friend[] @relation("FriendUsers")
+}
+model Friend {
+  id       Int  @id @default(autoincrement())
+  userId   String
+  friendId String
+  user     User @relation(name: "UserFriends", fields: [userId], references: [id])
+  friend   User @relation(name: "FriendUsers", fields: [friendId], references: [id])
 }
 model Movie {
   movieId  Int  @id

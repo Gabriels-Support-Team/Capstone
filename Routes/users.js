@@ -4,6 +4,92 @@ import multer from "multer";
 const router = express.Router();
 const prisma = new PrismaClient();
 const upload = multer({ dest: "uploads/" });
+router.get("/getFriends", (req, res) => {
+  const { userId } = req.query;
+  prisma.user
+    .findUnique({
+      where: { id: userId },
+      include: {
+        friends: {
+          select: {
+            friend: {
+              select: {
+                id: true,
+                email: true,
+                profilePic: true,
+              },
+            },
+          },
+        },
+        friendOf: {
+          select: {
+            user: {
+              select: {
+                id: true,
+                email: true,
+                profilePic: true,
+              },
+            },
+          },
+        },
+      },
+    })
+    .then((userWithFriends) => {
+      res.json({
+        initiatedFriends: userWithFriends.friends.map((f) => f.friend),
+        receivedFriends: userWithFriends.friendOf.map((f) => f.user),
+      });
+    });
+});
+
+router.post("/addFriend", (req, res) => {
+  const { userId, friendId } = req.body;
+  prisma.friend
+    .create({
+      data: {
+        userId: userId,
+        friendId: friendId,
+      },
+    })
+    .then((result) => {
+      res.json(result);
+    });
+});
+router.get("/friendSearch", (req, res) => {
+  const { query, userId } = req.query;
+  prisma.user
+    .findUnique({
+      where: { id: userId },
+      include: {
+        friends: {
+          select: { friendId: true },
+        },
+        friendOf: {
+          select: { userId: true },
+        },
+      },
+    })
+    .then((userWithFriends) => {
+      const friendIds = [
+        ...userWithFriends.friends.map((f) => f.friendId),
+        userId,
+      ];
+      return prisma.user.findMany({
+        where: {
+          AND: [
+            { email: { contains: query, mode: "insensitive" } },
+            { id: { notIn: friendIds } },
+          ],
+        },
+        select: {
+          id: true,
+          email: true,
+          profilePic: true,
+        },
+      });
+    })
+    .then((users) => res.json(users));
+});
 router.post(
   "/upload-profile-pic",
   upload.single("profilePic"),
@@ -224,4 +310,21 @@ router.get("/:userId", (req, res) => {
       res.json({ data: user });
     });
 });
+
+router.delete("/removeFriend", (req, res) => {
+  const { userId, friendId } = req.body;
+  prisma.friend
+    .deleteMany({
+      where: {
+        OR: [
+          { userId: userId, friendId: friendId },
+          { userId: friendId, friendId: userId },
+        ],
+      },
+    })
+    .then((result) => {
+      res.json(result);
+    });
+});
+
 export default router;

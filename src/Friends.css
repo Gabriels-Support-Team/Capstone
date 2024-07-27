@@ -1,7 +1,12 @@
 .friendsContainer {
   display: flex;
-  flex-wrap: wrap; /* Enable wrapping of items */
+  flex-wrap: wrap;
   justify-content: center;
   margin: 10px;
   padding-top: 30px;
+  margin-bottom: 100px;
+}
+.modalsContent {
+  max-height: 50vh;
+  overflow-y: auto;
 }
