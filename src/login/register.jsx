@@ -47,7 +47,6 @@ const Register = () => {
         }
         navigate("/home");
       } catch (error) {
-        console.error("Registration error:", error);
         setIsRegistering(false);
       }
     }

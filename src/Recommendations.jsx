@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 import MovieCard from "./MovieCard";
 import FlixterHeader from "./FlixterHeader";
 import { getRatingColor } from "./utils";
-import { ThreeCircles } from "/node_modules/.vite/deps/react-loader-spinner.js";
+import { ThreeCircles } from "react-loader-spinner";
 
 function Recommendations() {
   const location = useLocation();

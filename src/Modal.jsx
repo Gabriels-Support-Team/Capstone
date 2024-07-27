@@ -30,8 +30,7 @@ function CreateModal({ isOpen, close, movie }) {
             `https://www.youtube.com/embed/${videoKey}?si=m_gdkGRG2IUGLWpC`
           );
         }
-      })
-      .catch((error) => console.error("Failed to fetch video details:", error));
+      });
 
     // Fetch movie details
     fetch(
@@ -39,8 +38,7 @@ function CreateModal({ isOpen, close, movie }) {
       options
     )
       .then((response) => response.json())
-      .then(setMovieDetails)
-      .catch((error) => console.error("Failed to fetch movie details:", error));
+      .then(setMovieDetails);
   }, [movie, isOpen]);
 
   if (!isOpen) return null;

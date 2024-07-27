@@ -3,14 +3,9 @@ import { PrismaClient } from "@prisma/client";
 const router = express.Router();
 const prisma = new PrismaClient();
 router.get("/", (req, res) => {
-  prisma.movie
-    .findMany()
-    .then((movies) => {
-      res.json(movies);
-    })
-    .catch((error) => {
-      res.status(500).json({ error: "Failed to fetch movies" });
-    });
+  prisma.movie.findMany().then((movies) => {
+    res.json(movies);
+  });
 });
 router.get("/search", (req, res) => {
   const { query } = req.query;
@@ -26,13 +21,11 @@ router.get("/search", (req, res) => {
     .then((movies) => res.json(movies));
 });
 router.get("/random", (req, res) => {
-  prisma.$queryRaw`SELECT * FROM "Movie" ORDER BY RANDOM() LIMIT 3`
-    .then((randomMovies) => {
+  prisma.$queryRaw`SELECT * FROM "Movie" ORDER BY RANDOM() LIMIT 3`.then(
+    (randomMovies) => {
       res.json(randomMovies);
-    })
-    .catch((error) => {
-      res.status(500).json({ error: "Failed to fetch random movies" });
-    });
+    }
+  );
 });
 router.get("/:id", (req, res) => {
   const { id } = req.params;

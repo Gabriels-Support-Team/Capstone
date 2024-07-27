@@ -40,11 +40,6 @@ function MovieCard({
             }
           });
           setUniquePlatforms(newPlatforms);
-
-          console.log(
-            "Unique Streaming Platforms:",
-            Array.from(uniquePlatforms)
-          );
           return uniquePlatforms;
         });
     }

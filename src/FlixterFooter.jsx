@@ -23,11 +23,9 @@ function FlixterFooter() {
             Facebook
           </a>
           <a href="https://twitter.com" target="_blank">
-            {" "}
             Twitter
           </a>
           <a href="https://instagram.com" target="_blank">
-            {" "}
             Instagram
           </a>
         </div>

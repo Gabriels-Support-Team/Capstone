@@ -229,29 +229,25 @@ router.get("/bookmarkedMovies/:userId", (req, res) => {
 
 router.get("/userMovies/:userId", async (req, res) => {
   const userId = req.params.userId;
-  try {
-    const userMovies = await prisma.userMovies.findMany({
-      where: { userId: userId },
-      orderBy: {
-        rating: "asc",
-      },
-      include: {
-        movie: true,
-      },
-    });
-    res.json(
-      userMovies.map((um) => ({
-        movieId: um.movieId,
-        title: um.movie.title,
-        genres: um.movie.genres,
-        rating: um.rating,
-        comparisons: um.comparisons,
-        tmdbId: um.movie.tmdbId,
-      }))
-    );
-  } catch (error) {
-    res.status(500).send("Error fetching movies");
-  }
+  const userMovies = await prisma.userMovies.findMany({
+    where: { userId: userId },
+    orderBy: {
+      rating: "asc",
+    },
+    include: {
+      movie: true,
+    },
+  });
+  res.json(
+    userMovies.map((um) => ({
+      movieId: um.movieId,
+      title: um.movie.title,
+      genres: um.movie.genres,
+      rating: um.rating,
+      comparisons: um.comparisons,
+      tmdbId: um.movie.tmdbId,
+    }))
+  );
 });
 router.post("/getUserMovie", async (req, res) => {
   const { userId, movieId } = req.body;
