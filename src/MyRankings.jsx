@@ -13,10 +13,7 @@ function MyRankings({ movies }) {
         .then((response) => response.json())
         .then((data) => {
           setData(data.reverse());
-        })
-        .catch((error) =>
-          console.error("Error fetching ranked movies:", error)
-        );
+        });
     }
   }, [currentUser]);
 
