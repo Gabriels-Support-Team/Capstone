@@ -21,24 +21,21 @@ function MovieLogger() {
           setLoading(false);
         })
         .catch((error) => {
-          console.error("Error fetching user movies:", error);
           setLoading(false);
         });
     }
   }, [currentUser, moviesLogged]);
   const handleMovieLogged = (searchId) => {
-    console.log("hello")
     setMoviesLogged(moviesLogged + 1);
-    if (searchId==1){
-      setShowFirstSearch(false)
+    if (searchId == 1) {
+      setShowFirstSearch(false);
     }
-    if (searchId==2){
-      setShowSecondSearch(false)
+    if (searchId == 2) {
+      setShowSecondSearch(false);
     }
-    if (searchId==3){
-      setShowThirdSearch(false)
+    if (searchId == 3) {
+      setShowThirdSearch(false);
     }
-
   };
   if (loading) {
     return <p>Loading...</p>;
@@ -50,33 +47,48 @@ function MovieLogger() {
         <FlixterHeader />
 
         <div className="loggingContainer">
+          {showFirstSearch && (
+            <>
+              <div className="question">
+                What is one movie that you really enjoyed?
+              </div>
+              <MovieSearch
+                initialRating={7.5}
+                onMovieLogged={() => {
+                  handleMovieLogged(1);
+                }}
+              />
+            </>
+          )}
 
+          {showSecondSearch && (
+            <>
+              <div className="question">
+                What is one movie that you did not like?
+              </div>
+              <MovieSearch
+                initialRating={2.5}
+                onMovieLogged={() => {
+                  handleMovieLogged(2);
+                }}
+              />
+            </>
+          )}
+          {showThirdSearch && (
+            <>
+              <div className="question">
+                What is one movie that was just ok?
+              </div>
 
-          {showFirstSearch &&
-          <>
-          <div className="question">
-            What is one movie that you really enjoyed?
-          </div>
-          <MovieSearch initialRating={7.5} onMovieLogged={()=>{handleMovieLogged(1)}} />
-          </>
-  }
-
-          {showSecondSearch &&
-          <>
-          <div className="question">
-          What is one movie that you did not like?
+              <MovieSearch
+                initialRating={5}
+                onMovieLogged={() => {
+                  handleMovieLogged(3);
+                }}
+              />
+            </>
+          )}
         </div>
-          <MovieSearch initialRating={2.5} onMovieLogged={()=>{handleMovieLogged(2)}} />
-          </>
-          }
-          {showThirdSearch &&
-          <>
-                    <div className="question">What is one movie that was just ok?</div>
-
-          <MovieSearch initialRating={5} onMovieLogged={()=>{handleMovieLogged(3)}} />
-          </>
-          }
-          </div>
       </div>
     );
   }

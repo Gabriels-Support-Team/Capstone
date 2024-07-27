@@ -1,4 +1,3 @@
-//https://api.themoviedb.org/3/discover/movie?language=en-US&page=
 import React, { useState, useEffect } from "react";
 import "./MovieList.css";
 import MovieCard from "./MovieCard";
@@ -55,8 +54,7 @@ function MovieList({
               ? [...data.results, ...newData.results]
               : [...newData.results],
         }));
-      })
-      .catch((error) => console.error("Error fetching data:", error));
+      });
   }, [page, fetchURL, sortSelection, genreSelection]);
   //load API data into movieCard containers
   const divs = data?.results?.slice(0, 5).map((movie, index) => (
@@ -173,10 +171,7 @@ function MovieList({
         })
         .then((data) => {
           setRanks(data.reverse());
-        })
-        .catch((error) =>
-          console.error("Error fetching ranked movies:", error)
-        );
+        });
     }
   }, [currentUser]);
   const rankings = ranks?.slice(0, 5).map((movie, index) => {

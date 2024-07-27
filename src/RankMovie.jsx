@@ -33,10 +33,7 @@ function RankMovie() {
           setUserMovies(filteredMovies);
           setHigh(filteredMovies.length - 1);
           setTotalMovies(filteredMovies.length);
-        })
-        .catch((error) =>
-          console.error("Error fetching ranked movies:", error)
-        );
+        });
     }
   }, [currentUser, newMovie]);
   // Determine the closest movie rating to the new movie's rating for initial comparison
@@ -60,7 +57,6 @@ function RankMovie() {
       setLoadingPercentage(
         Math.max((1 - (high - low) / totalMovies) * 100 - 10, 0)
       );
-      console.log(Math.max((1 - (high - low) / totalMovies) * 100 - 10, 0));
     }
   }, [low, high, newMovie]);
   // Function to update movie ratings in the backend
@@ -72,11 +68,7 @@ function RankMovie() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ userId, movieId, rating }),
-    })
-      .then((response) => response.json())
-      .catch((error) => {
-        console.error("Error logging movie:", error);
-      });
+    }).then((response) => response.json());
   }
   // Adjust K-factor based on the number of comparisons,
   // ensuring it decreases logarithmically. Comparison count increments in the backend each time a comparison is made
@@ -91,7 +83,6 @@ function RankMovie() {
   const handleComparison = async (prefersNewMovie) => {
     //get newly logged movie, initial
     if (!currentUser || !newMovie || mid === undefined) {
-      console.error("Current user or new movie data is not available.");
       return;
     }
 

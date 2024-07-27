@@ -47,6 +47,7 @@ function Friends() {
       body: JSON.stringify({ userId, friendId }),
     });
   }
+
   const handleFriendClick = (friendId) => {
     fetch(`http://localhost:3000/users/userMovies/${friendId}`)
       .then((response) => response.json())

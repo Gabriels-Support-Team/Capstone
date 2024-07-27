@@ -8,9 +8,7 @@ const PORT = 3000;
 import userRoutes from "./Routes/users.js";
 import movieRoutes from "./Routes/movies.js";
 import mlRoutes from "./scripts/FetchMLRecs.js";
-app.listen(PORT, () => {
-  console.log("server is running");
-});
+app.listen(PORT, () => {});
 
 app.get("/", (req, res) => {
   res.send("Welcome to my app!");

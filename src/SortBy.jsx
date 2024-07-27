@@ -18,11 +18,9 @@ function DropDown({ sortSelection, setSortSelection, setFetchURL, setPage }) {
         <option value="original_title.desc"> alphabetical-High to Low</option>
 
         <option value="primary_release_date.asc">
-          {" "}
           Release Date-Low to High
         </option>
         <option value="primary_release_date.desc">
-          {" "}
           Release Date-High to Low
         </option>
         <option value="vote_average.asc">Rating-Low to High</option>

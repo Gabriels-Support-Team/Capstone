@@ -68,4 +68,5 @@ function FlixterHeader({ likedMovies, watchedMovies }) {
     </header>
   );
 }
+
 export default FlixterHeader;
