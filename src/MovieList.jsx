@@ -193,14 +193,14 @@ function MovieList({
     );
   });
   useEffect(() => {
-    if (currentUser) {
+    if (currentUser && ranks) {
       const encodedQuery = encodeURIComponent(currentUser.uid);
 
       fetch(`http://localhost:3000/users/getFriends?userId=${encodedQuery}`)
         .then((response) => response.json())
         .then((data) => setFriends(data));
     }
-  }, [currentUser]);
+  }, [currentUser, ranks]);
   return (
     <div className="movieList">
       <CreateModal

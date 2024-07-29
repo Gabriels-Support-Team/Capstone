@@ -35,10 +35,22 @@ router.get("/getFriends", (req, res) => {
       },
     })
     .then((userWithFriends) => {
+      if (!userWithFriends) {
+        return res.status(404).json({ error: "AUser not found" });
+      }
+      const initiatedFriends = userWithFriends.friends
+        ? userWithFriends.friends.map((f) => f.friend)
+        : [];
+      const receivedFriends = userWithFriends.friendOf
+        ? userWithFriends.friendOf.map((f) => f.user)
+        : [];
       res.json({
-        initiatedFriends: userWithFriends.friends.map((f) => f.friend),
-        receivedFriends: userWithFriends.friendOf.map((f) => f.user),
+        initiatedFriends,
+        receivedFriends,
       });
+    })
+    .catch((error) => {
+      res.status(500).json({ error: "Internal server error" });
     });
 });
 
