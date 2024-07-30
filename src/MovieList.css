@@ -2,8 +2,9 @@
   display: flex;
   flex-wrap: wrap; /* Enable wrapping of items */
   justify-content: center; /* Align items to the start of the container */
-  margin-left: 30px;
-  margin-right: 30px;
+  margin-left: 100px;
+  margin-right: 100px;
+  flex-direction: row;
 }
 .movieListContainerInactive {
   display: none;
@@ -49,8 +50,15 @@
 .recommendationsBanner {
   display: flex;
   justify-content: space-between;
-  margin: 50px 8% 0px 8%;
-  align-items: center;
+  margin: 100px 8% 0px 8%;
+  text-align: center;
+}
+.recommendationsBanners {
+  display: flex;
+  justify-content: space-between;
+  margin: 0px 8% 0px 8%;
+  text-align: center;
+  justify-content: center;
 }
 .showAll {
   font-size: 25px;
@@ -61,4 +69,25 @@
 
 .showAll:hover {
   text-decoration: underline;
+}
+.recs {
+  width: 40%;
+}
+.recText {
+  width: 50%;
+  font-size: 3vh;
+  font-family: Arial;
+}
+.mainTitle {
+  font-size: 7vh;
+}
+
+.noneFound {
+  font-size: 2.5vh;
+  font-family: Arial;
+  height: 30%;
+}
+.buttonContainer {
+  height: 20vh;
+  display: flex;
 }

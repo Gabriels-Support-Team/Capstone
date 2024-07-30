@@ -4,6 +4,7 @@ import "./Modal.css";
 function CreateModal({ isOpen, close, movie }) {
   const [movieDetails, setMovieDetails] = useState(null);
   const [videoSrc, setVideoSrc] = useState("");
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     if (!isOpen || !movie) return;
@@ -43,38 +44,64 @@ function CreateModal({ isOpen, close, movie }) {
 
   if (!isOpen) return null;
   if (!movieDetails) return <div>Loading...</div>;
-
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <button className="modalClose" onClick={close}>
-          X
+    <section className="modal-overlay" onClick={close}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <button className="close-button" onClick={close}>
+          &times;
         </button>
-        <h1>{movieDetails.original_title}</h1>
-        <img
-          src={`https://image.tmdb.org/t/p/w342${movieDetails.backdrop_path}`}
-          alt={movieDetails.original_title}
-        />
-        <p>Release Date: {movieDetails.release_date}</p>
-        <p>Overview: {movieDetails.overview}</p>
-        <p>
-          Genres: {movieDetails.genres?.map((genre) => genre.name).join(", ")}
-        </p>
-        <p>Runtime: {movieDetails.runtime} minutes</p>
-        {videoSrc && (
-          <iframe
-            width="560"
-            height="315"
-            src={videoSrc}
-            title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allowFullScreen
+        <div className="modal-image-wrapper">
+          <img
+            src={
+              !movieDetails?.backdrop_path
+                ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1f4C-cWV03_czRXhL1THkOdS9RDnAtPxRnA&s"
+                : "https://image.tmdb.org/t/p/w1280" +
+                  movieDetails.backdrop_path
+            }
+            alt="Movie Poster"
+            className="modal-image"
           />
-        )}
+        </div>
+
+        <div className="modal-details">
+          <h1>{movieDetails.title}</h1>
+          <div className="movieInfo">
+            <p>{movieDetails.release_date}</p>
+            <p id="age">{movieDetails.adult ? "PG-13" : "R"}</p>
+            <p id="time"> {movieDetails.runtime} minutes</p>
+            <p id="quality"> HD</p>
+          </div>
+          <strong className="movieSub">Overview: </strong>
+          <p id="overview" className="movieText">
+            {movieDetails.overview}
+          </p>
+          <strong className="movieSub">Genres: </strong>
+          <p id="genre" className="movieText">
+            {movieDetails.genres?.length > 0
+              ? movieDetails.genres.map((genre) => genre.name).join(", ")
+              : "Loading..."}
+          </p>
+          <div className="expand-section">
+            <h2 className="movieSub">Movie Trailer</h2>
+            <button
+              className="expand-button"
+              onClick={() => setIsExpanded((prevState) => !prevState)}
+            >
+              {isExpanded ? "⌃" : "⌄"}
+            </button>
+            {isExpanded && (
+              <iframe
+                src={videoSrc}
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title="Movie Trailer"
+                className="modal-movie-trailer"
+              ></iframe>
+            )}
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
 

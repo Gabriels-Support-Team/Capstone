@@ -14,6 +14,7 @@ import MyRankings from "./MyRankings.jsx";
 import Profile from "./Profile.jsx";
 import MovieLogger from "./MovieLogger.jsx";
 import RankMovie from "./RankMovie.jsx";
+import SignUpFlow from "./SignUpFlow.jsx";
 function App() {
   return (
     <AuthProvider>
@@ -83,6 +84,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <RankMovie />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/SignUpFlow"
+              element={
+                <ProtectedRoute>
+                  <SignUpFlow />
                 </ProtectedRoute>
               }
             />

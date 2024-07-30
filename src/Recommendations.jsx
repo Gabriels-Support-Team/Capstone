@@ -7,28 +7,20 @@ import FlixterHeader from "./FlixterHeader";
 import { getRatingColor } from "./utils";
 import { ThreeCircles } from "react-loader-spinner";
 import { AMOUNT_RECS } from "./config";
+import CreateModal from "./Modal";
 
 function Recommendations() {
   const location = useLocation();
   const { data } = location.state || { data: null };
   const highlightedMovie = data?.results?.[0];
-  const ratingColor = getRatingColor(highlightedMovie.vote_average);
   const [recommendations, setRecommendations] = useState();
   const { currentUser } = useAuth();
   const [movieCards2, setMovieCards2] = useState();
   const [age, setAge] = useState();
   const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
-  const movieCards = data?.results
-    ?.slice(0, AMOUNT_RECS)
-    .map((movie, index) => (
-      <MovieCard
-        key={movie.id}
-        movieImage={`https://image.tmdb.org/t/p/w342${movie?.poster_path}`}
-        movieRating={movie.vote_average}
-        movieTitle={movie.original_title}
-      />
-    ));
   function fetchRecommendations() {
     setLoading(true);
     fetch(`http://localhost:3000/ml/fetchRecs?userId=${currentUser.uid}`)
@@ -61,6 +53,8 @@ function Recommendations() {
               throw new Error("Failed to fetch movie details");
             }
             const details = await response.json();
+            console.log(details);
+
             return (
               <MovieCard
                 key={movie.itemID}
@@ -69,6 +63,7 @@ function Recommendations() {
                 bookmarkMovie={bookmarkMovie}
                 includeBookmark={true}
                 movieId={movie.itemID}
+                openModal={() => openModal(details)}
               />
             );
           })
@@ -78,10 +73,24 @@ function Recommendations() {
       fetchAllMovieDetails();
     }
   }, [recommendations]);
-
+  const openModal = (movie) => {
+    setSelectedMovie(movie);
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedMovie(null);
+  };
   return (
     <>
       <FlixterHeader></FlixterHeader>
+      {selectedMovie && (
+        <CreateModal
+          isOpen={isModalOpen}
+          close={closeModal}
+          movie={selectedMovie}
+        />
+      )}
       <div className="pageContainer">
         <h1 className="recTitle">Personalized Recommendations</h1>
         <div className="buttonContain">
@@ -101,34 +110,8 @@ function Recommendations() {
         {!loading && (
           <div className="recommendationsContainer">{movieCards2}</div>
         )}
-        {highlightedMovie && !loading ? (
-          <>
-            <h1 className="newMovieTitle">New Movies in Theaters</h1>
-
-            <div className="highlightedMovie">
-              <img
-                className="highlightedMoviePic"
-                src={`https://image.tmdb.org/t/p/w342${highlightedMovie.backdrop_path}`}
-                alt={highlightedMovie.original_title}
-              />
-              <div className="highlightedMovieText">
-                Top Pick: <br></br>
-                {highlightedMovie.original_title}
-                <div className="releaseDate">
-                  {highlightedMovie.release_date}
-                </div>
-                <div className="overview">{highlightedMovie.overview}</div>
-                <div className="releaseDate">Audience rating:</div>
-                <div
-                  style={{ borderColor: ratingColor, color: ratingColor }}
-                  className="vote-average"
-                >
-                  {highlightedMovie.vote_average}
-                </div>
-              </div>
-            </div>
-            <div className="recommendationsContainer">{movieCards}</div>
-          </>
+        {!loading ? (
+          <></>
         ) : (
           <div className="loadingContainer">
             <ThreeCircles

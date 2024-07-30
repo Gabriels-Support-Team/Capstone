@@ -5,9 +5,11 @@ import SortBy from "./SortBy";
 import IncludeGenre from "./IncludeGenre";
 import FlixterHeader from "./FlixterHeader";
 import FlixterFooter from "./FlixterFooter";
-import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "./contexts/authContext";
+import { Navigate, Link } from "react-router-dom";
+
 const HomePage = () => {
-  const navigate = useNavigate();
+  const { currentUser } = useAuth();
 
   const [sortSelection, setSortSelection] = useState("");
   const [fetchURL, setFetchURL] = useState(
@@ -16,6 +18,7 @@ const HomePage = () => {
   const [genreSelection, setGenreSelection] = useState("");
   const [genres, setGenres] = useState();
   const [page, setPage] = useState(1);
+  const [totalMovies, setTotalMovies] = useState();
   const [likedMovies, setLikedMovies] = useState(() => {
     const savedLikes = localStorage.getItem("likedMovies");
     return savedLikes ? JSON.parse(savedLikes) : {};
@@ -58,9 +61,20 @@ const HomePage = () => {
       .then((response) => setGenres(response));
   }, []);
 
+  useEffect(() => {
+    if (currentUser) {
+      fetch(`http://localhost:3000/users/userMovies/${currentUser.uid}`)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data.length);
+          setTotalMovies(data.length);
+        });
+    }
+  }, [currentUser]);
   return (
     <div className="App">
       <FlixterHeader likedMovies={likedMovies} watchedMovies={watchedMovies} />
+      {totalMovies < 3 && <Navigate to={"/SignUpFlow"} replace={true} />}
       <div style={{ paddingTop: "100px" }}>
         <MovieList
           sortSelection={sortSelection}

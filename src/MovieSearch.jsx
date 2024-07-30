@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "./contexts/authContext";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-
+import "./MovieSearch.css";
 function MovieSearch({ initialRating, onMovieLogged }) {
   const [movies, setMovies] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -77,15 +77,15 @@ function MovieSearch({ initialRating, onMovieLogged }) {
           <motion.div
             whileTap={{ scale: 0.9 }}
             initial={{
-              opacity: 0,
+              opacity: 0.3,
             }}
             whileInView={{
               opacity: 1,
             }}
             viewport={{
               // once: true,
-              margin: "-20px",
-              amount: "all",
+              margin: "700px",
+              amount: "some",
             }}
             onClick={() => {
               setMovieSelectedFlag(true);
@@ -112,7 +112,7 @@ function MovieSearch({ initialRating, onMovieLogged }) {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             initial={{
-              opacity: 0,
+              opacity: 0.3,
             }}
             whileInView={{
               opacity: 1,
@@ -120,7 +120,7 @@ function MovieSearch({ initialRating, onMovieLogged }) {
             viewport={{
               // once: true,
               margin: "-20px",
-              amount: "all",
+              amount: "some",
             }}
             onClick={() => {
               setMovieSelectedFlag(true);

@@ -5,8 +5,11 @@ import "./FlixterHeader.css";
 import { NavLink } from "react-router-dom";
 import logo from "./logo.png";
 import { useAuth } from "./contexts/authContext";
+import { useNavigate } from "react-router-dom";
 
 function FlixterHeader({ likedMovies, watchedMovies }) {
+  const navigate = useNavigate();
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [userInfo, setUserInfo] = useState();
@@ -29,18 +32,23 @@ function FlixterHeader({ likedMovies, watchedMovies }) {
         <img className="logo" src={logo} alt="" />
       </NavLink>
       <div className="links">
-        <NavLink className="navLink" to={"/myRankings"}>
-          Watched Movies
-        </NavLink>
-
-        <NavLink className="navLink" to={"/Friends"}>
-          Friends
-        </NavLink>
         <NavLink className="navLink" to={"/profile"}>
           Profile
         </NavLink>
+        <NavLink className="navLink" to={"/myRankings"}>
+          Watched Movies
+        </NavLink>
+        <NavLink className="navLink" to={"/Friends"}>
+          Friends
+        </NavLink>
+        <NavLink className="navLink" to={"/bookmarks"}>
+          Bookmarks
+        </NavLink>
         <NavLink className="navLink" to={"/movieLogger"}>
           Log new Movie
+        </NavLink>
+        <NavLink className="navLink" to={"/recommendations"}>
+          Recs
         </NavLink>
       </div>
 
