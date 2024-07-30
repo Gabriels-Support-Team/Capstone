@@ -51,7 +51,7 @@ function MovieLogger() {
           {showFirstSearch && (
             <>
               <div className="question">
-                What is one movie that you really enjoyed?
+                What is a movie that you really loved watching?
               </div>
               <MovieSearch
                 initialRating={GOOD_RATING}
@@ -65,7 +65,7 @@ function MovieLogger() {
           {showSecondSearch && (
             <>
               <div className="question">
-                What is one movie that you did not like?
+                What is a movie that you didn't enjoy?
               </div>
               <MovieSearch
                 initialRating={BAD_RATING}
@@ -77,9 +77,7 @@ function MovieLogger() {
           )}
           {showThirdSearch && (
             <>
-              <div className="question">
-                What is one movie that was just ok?
-              </div>
+              <div className="question">What is a movie that was just ok?</div>
 
               <MovieSearch
                 initialRating={OK_RATING}

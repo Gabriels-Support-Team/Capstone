@@ -8,6 +8,7 @@ import FriendCard from "./FriendCard";
 import { useAuth } from "./contexts/authContext";
 import { AMOUNT_MOVIES } from "./config";
 import { AMOUNT_USERS } from "./config";
+import recs from "./recs.png";
 
 function MovieList({
   sortSelection,
@@ -63,7 +64,7 @@ function MovieList({
   const Cards = data?.results?.slice(0, AMOUNT_MOVIES).map((movie, index) => (
     <MovieCard
       key={movie.id}
-      movieImage={`https://image.tmdb.org/t/p/w342${movie?.poster_path}`}
+      movieImage={`https://image.tmdb.org/t/p/w780${movie?.poster_path}`}
       movieRating={movie.vote_average}
       movieTitle={movie.original_title}
       openModal={() => {
@@ -105,7 +106,7 @@ function MovieList({
       return (
         <MovieCard
           key={bookmark.movieId}
-          movieImage={`https://image.tmdb.org/t/p/w342${bookmark.movieDetails?.poster_path}`}
+          movieImage={`https://image.tmdb.org/t/p/w780${bookmark.movieDetails?.poster_path}`}
           movieRating={Number(bookmark.predictedRating)}
           movieTitle={bookmark.movie.title}
           movieId={bookmark.movieId}
@@ -184,7 +185,7 @@ function MovieList({
       <MovieCard
         key={movie.movieId}
         movieRating={movie.rating}
-        movieImage={`https://image.tmdb.org/t/p/w342${movie.movieDetails?.poster_path}`}
+        movieImage={`https://image.tmdb.org/t/p/w780${movie.movieDetails?.poster_path}`}
         movieTitle={movie.title}
         openModal={() => {
           populateModal(movie);
@@ -211,22 +212,6 @@ function MovieList({
         movie={modalMovie}
       ></CreateModal>
 
-      <div className="toggleButtons">
-        <button
-          onClick={() => {
-            setSearchActive(!showSearch);
-          }}
-        >
-          Search
-        </button>
-        <button
-          onClick={() => {
-            submitNowPlaying();
-          }}
-        >
-          Now Playing
-        </button>
-      </div>
       <div className={showSearch ? "searchActive" : "searchInactive"}>
         <input
           type="text"
@@ -243,14 +228,8 @@ function MovieList({
         </button>
       </div>
       <div className="reccomendations">
-        <div className="recommendationsBanner">
-          <h1>Personalized Recommendations</h1>
-          <p
-            className="showAll"
-            onClick={() => navigate("../recommendations", { state: { data } })}
-          >
-            Show all
-          </p>
+        <div className="recommendationsBanners">
+          <h1 className="mainTitle">Movie Night!</h1>
         </div>
         <div
           className={
@@ -259,7 +238,24 @@ function MovieList({
               : "movieListContainerActive"
           }
         >
-          {Cards}
+          <div className="recText">
+            Discover movies tailored just for you!
+            <br />
+            <br /> Our advanced machine learning algorithm analyzes your viewing
+            history to recommend films you'll love and even predicts your
+            ratings.
+            <br />
+            <br />
+            <button
+              className="noneFound"
+              onClick={() =>
+                navigate("../recommendations", { state: { data } })
+              }
+            >
+              Generate
+            </button>
+          </div>
+          <img className="recs" src={recs} alt="" />
         </div>
       </div>
       <div className="My dynamic rankings">
@@ -295,6 +291,16 @@ function MovieList({
         >
           {bookmarks}
         </div>
+        {bookmarksData?.length === 0 && (
+          <div className="buttonContainer">
+            <button
+              className="noneFound"
+              onClick={() => navigate("../recommendations")}
+            >
+              Find Recs
+            </button>
+          </div>
+        )}
       </div>
       <div className="Friends">
         <div className="recommendationsBanner">
@@ -310,9 +316,19 @@ function MovieList({
               : "movieListContainerActive"
           }
         >
-          {friends?.initiatedFriends.slice(0, AMOUNT_USERS).map((friend) => (
+          {friends?.initiatedFriends?.slice(0, AMOUNT_USERS).map((friend) => (
             <FriendCard email={friend.email} profilePic={friend.profilePic} />
           ))}
+          {friends?.initiatedFriends < 1 && (
+            <div className="buttonContainer">
+              <button
+                className="noneFound"
+                onClick={() => navigate("../Friends")}
+              >
+                Find Friends
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -124,3 +124,7 @@ input:focus + label {
 .error {
   color: white;
 }
+h3 {
+  padding: 20px;
+  font-family: Arial;
+}
