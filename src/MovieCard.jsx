@@ -64,6 +64,7 @@ function MovieCard({
             onClick={(e) => {
               bookmarkMovie(movieId, movieRating);
               setBookmarked(true);
+              e.stopPropagation();
             }}
           >
             {bookmarked ? "Bookmarked!" : "Bookmark"}

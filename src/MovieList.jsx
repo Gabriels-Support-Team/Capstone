@@ -127,7 +127,11 @@ function MovieList({
     };
 
     if (currentUser) {
-      fetch(`http://localhost:3000/users/bookmarkedMovies/${currentUser.uid}`)
+      fetch(
+        `${import.meta.env.VITE_API_URL}/users/bookmarkedMovies/${
+          currentUser.uid
+        }`
+      )
         .then((response) => response.json())
         .then((bookmarks) => {
           const fetches = bookmarks.map((bookmark) => {
@@ -158,7 +162,9 @@ function MovieList({
       },
     };
     if (currentUser) {
-      fetch(`http://localhost:3000/users/userMovies/${currentUser.uid}`)
+      fetch(
+        `${import.meta.env.VITE_API_URL}/users/userMovies/${currentUser.uid}`
+      )
         .then((response) => response.json())
         .then((bookmarks) => {
           const fetches = bookmarks.map((bookmark) => {
@@ -197,7 +203,11 @@ function MovieList({
     if (currentUser && ranks) {
       const encodedQuery = encodeURIComponent(currentUser.uid);
 
-      fetch(`http://localhost:3000/users/getFriends?userId=${encodedQuery}`)
+      fetch(
+        `${
+          import.meta.env.VITE_API_URL
+        }/users/getFriends?userId=${encodedQuery}`
+      )
         .then((response) => response.json())
         .then((data) => setFriends(data));
     }

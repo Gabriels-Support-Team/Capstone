@@ -4,7 +4,7 @@ import "./MovieLogger.css";
 import { useAuth } from "./contexts/authContext";
 import MovieSearch from "./MovieSearch";
 import { GOOD_RATING, OK_RATING, BAD_RATING } from "./config";
-
+import { useNavigate } from "react-router-dom";
 function MovieLogger() {
   const { currentUser } = useAuth();
   const [userMovies, setUserMovies] = useState([]);
@@ -13,9 +13,13 @@ function MovieLogger() {
   const [showFirstSearch, setShowFirstSearch] = useState(true);
   const [showSecondSearch, setShowSecondSearch] = useState(true);
   const [showThirdSearch, setShowThirdSearch] = useState(true);
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (currentUser) {
-      fetch(`http://localhost:3000/users/userMovies/${currentUser.uid}`)
+      fetch(
+        `${import.meta.env.VITE_API_URL}/users/userMovies/${currentUser.uid}`
+      )
         .then((response) => response.json())
         .then((data) => {
           setUserMovies(data);
@@ -96,6 +100,12 @@ function MovieLogger() {
     <div>
       <FlixterHeader />
       <div className="loggingContainer">
+        <button
+          class="recsButton"
+          onClick={() => navigate("../recommendations")}
+        >
+          Done Logging? Get Elite Recommendations based on your Preferences!
+        </button>
         <div className="question">New Movie to Log?</div>
         <MovieSearch />
       </div>

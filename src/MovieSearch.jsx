@@ -19,19 +19,19 @@ function MovieSearch({ initialRating, onMovieLogged }) {
   };
   const submitSearch = (query) => {
     const encodedQuery = encodeURIComponent(query);
-    fetch(`http://localhost:3000/movies/search?query=${encodedQuery}`)
+    fetch(`${import.meta.env.VITE_API_URL}/movies/search?query=${encodedQuery}`)
       .then((response) => response.json())
       .then((data) => setMovies(data));
   };
   useEffect(() => {
-    fetch(`http://localhost:3000/movies/random`)
+    fetch(`${import.meta.env.VITE_API_URL}/movies/random`)
       .then((response) => response.json())
       .then((data) => setRandom(data));
   }, [suggestions]);
   function logMovieForUser(movieId) {
     const rating = initialRating;
     const userId = currentUser ? currentUser.uid : null; // This should be dynamically set based on the logged-in user
-    fetch("http://localhost:3000/users/logMovie", {
+    fetch(`${import.meta.env.VITE_API_URL}/users/logMovie`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

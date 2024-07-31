@@ -4,13 +4,13 @@ import FlixterHeader from "./FlixterHeader";
 import { getRatingColor } from "./utils";
 import { useAuth } from "./contexts/authContext";
 import CreateModal from "./Modal";
-
+import { useNavigate } from "react-router-dom";
 function MyRankings({ movies }) {
   const [page, setPage] = useState(1);
   const [data, setData] = useState();
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMovie, setModalMovie] = useState();
-
+  const navigate = useNavigate();
   const { currentUser } = useAuth();
   function populateModal(movie) {
     setModalOpen(true);
@@ -25,7 +25,9 @@ function MyRankings({ movies }) {
       },
     };
     if (currentUser) {
-      fetch(`http://localhost:3000/users/userMovies/${currentUser.uid}`)
+      fetch(
+        `${import.meta.env.VITE_API_URL}/users/userMovies/${currentUser.uid}`
+      )
         .then((response) => response.json())
         .then((bookmarks) => {
           const fetches = bookmarks.map((bookmark) => {
@@ -43,7 +45,6 @@ function MyRankings({ movies }) {
           return Promise.all(fetches);
         })
         .then((data) => {
-          console.log(data);
           setData(data.reverse());
         });
     }
@@ -51,7 +52,7 @@ function MyRankings({ movies }) {
 
   function deleteRanking(movieId) {
     const userId = currentUser.uid;
-    fetch("http://localhost:3000/users/userMovie", {
+    fetch(`${import.meta.env.VITE_API_URL}/users/userMovie`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -76,6 +77,9 @@ function MyRankings({ movies }) {
 
       <div className="rankingsTitle">Watched Movies</div>
       <div className="sub">Explore personal ratings for movies you've seen</div>
+      <div className="recsButtonContainer">
+        <button onClick={() => navigate("../movieLogger")}>Add movie</button>
+      </div>
       <div className="exampleRating">
         <div
           style={{

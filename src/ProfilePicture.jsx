@@ -21,7 +21,7 @@ function ProfilePictureUpload() {
     formData.append("userId", `${currentUser.uid}`);
 
     const response = await fetch(
-      "http://localhost:3000/users/upload-profile-pic",
+      `${import.meta.env.VITE_API_URL}/users/upload-profile-pic`,
       {
         method: "POST",
         body: formData,

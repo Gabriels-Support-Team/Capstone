@@ -9,7 +9,7 @@ function Profile() {
   const [userInfo, setUserInfo] = useState();
   useEffect(() => {
     if (currentUser) {
-      fetch(`http://localhost:3000/users/${currentUser.uid}`)
+      fetch(`${import.meta.env.VITE_API_URL}/users/${currentUser.uid}`)
         .then((response) => response.json())
         .then((data) => {
           setUserInfo(data);
@@ -25,7 +25,9 @@ function Profile() {
           <div className="profileContainer">
             <img
               className="profileImage"
-              src={`http://localhost:3000/${userInfo?.data.profilePic}`}
+              src={`${import.meta.env.VITE_API_URL}/${
+                userInfo?.data.profilePic
+              }`}
               alt=""
             />
             <div className="profileTitle">{userInfo.data.email}</div>
