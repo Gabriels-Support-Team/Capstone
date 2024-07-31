@@ -4,7 +4,7 @@ app.use(express.json());
 import cors from "cors";
 app.use(cors());
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 import userRoutes from "./Routes/users.js";
 import movieRoutes from "./Routes/movies.js";
 import mlRoutes from "./scripts/FetchMLRecs.js";
