@@ -22,7 +22,9 @@ function Friends() {
   const submitSearch = (query) => {
     const encodedQuery = encodeURIComponent(query);
     fetch(
-      `http://localhost:3000/users/friendSearch?query=${encodedQuery}&userId=${currentUser.uid}`
+      `${
+        import.meta.env.VITE_API_URL
+      }/users/friendSearch?query=${encodedQuery}&userId=${currentUser.uid}`
     )
       .then((response) => response.json())
       .then((data) => setUsers(data));
@@ -31,7 +33,11 @@ function Friends() {
     if (currentUser) {
       const encodedQuery = encodeURIComponent(currentUser.uid);
 
-      fetch(`http://localhost:3000/users/getFriends?userId=${encodedQuery}`)
+      fetch(
+        `${
+          import.meta.env.VITE_API_URL
+        }/users/getFriends?userId=${encodedQuery}`
+      )
         .then((response) => response.json())
         .then((data) => setFriends(data));
     }
@@ -39,7 +45,7 @@ function Friends() {
 
   function logFriend(friendId) {
     const userId = currentUser ? currentUser.uid : null;
-    fetch("http://localhost:3000/users/addFriend", {
+    fetch(`${import.meta.env.VITE_API_URL}/users/addFriend`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -49,7 +55,7 @@ function Friends() {
   }
 
   const handleFriendClick = (friendId) => {
-    fetch(`http://localhost:3000/users/userMovies/${friendId}`)
+    fetch(`${import.meta.env.VITE_API_URL}/users/userMovies/${friendId}`)
       .then((response) => response.json())
       .then((data) => {
         setFriendMovies(data);

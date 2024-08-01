@@ -63,10 +63,11 @@ const HomePage = () => {
 
   useEffect(() => {
     if (currentUser) {
-      fetch(`http://localhost:3000/users/userMovies/${currentUser.uid}`)
+      fetch(
+        `${import.meta.env.VITE_API_URL}/users/userMovies/${currentUser.uid}`
+      )
         .then((response) => response.json())
         .then((data) => {
-          console.log(data.length);
           setTotalMovies(data.length);
         });
     }

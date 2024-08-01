@@ -14,7 +14,7 @@ function FriendCard({
     <div className="Card" onClick={() => onClick()}>
       <img
         className="profileImage"
-        src={`http://localhost:3000/${profilePic}`}
+        src={`${import.meta.env.VITE_API_URL}/${profilePic}`}
         alt={profile}
       />
       <div className="friendName">{email}</div>

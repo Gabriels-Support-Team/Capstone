@@ -4,11 +4,13 @@ import "./Bookmarks.css";
 import MovieCard from "./MovieCard";
 import { useAuth } from "./contexts/authContext";
 import CreateModal from "./Modal";
+import { useNavigate } from "react-router-dom";
 function Bookmarks() {
   const { currentUser } = useAuth();
   const [data, setData] = useState();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
+  const navigate = useNavigate();
   const openModal = (movie) => {
     setSelectedMovie(movie);
     setIsModalOpen(true);
@@ -19,7 +21,7 @@ function Bookmarks() {
   };
   function unbookmarkMovie(movieId) {
     const userId = currentUser.uid;
-    fetch("http://localhost:3000/users/bookmarkMovie", {
+    fetch(`${import.meta.env.VITE_API_URL}/users/bookmarkMovie`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -47,12 +49,18 @@ function Bookmarks() {
       unbookmark={unbookmarkMovie}
       includeUnbookmark={true}
       tmdbId={bookmark.movie.tmdbId}
-      openModal={() => openModal(bookmark.movie)}
+      openModal={() => {
+        openModal(bookmark.movie);
+      }}
     />
   ));
   useEffect(() => {
     if (currentUser) {
-      fetch(`http://localhost:3000/users/bookmarkedMovies/${currentUser.uid}`)
+      fetch(
+        `${import.meta.env.VITE_API_URL}/users/bookmarkedMovies/${
+          currentUser.uid
+        }`
+      )
         .then((response) => response.json())
         .then((data) => {
           setData(data);
@@ -72,7 +80,16 @@ function Bookmarks() {
 
       <div className="rankingsTitle">Bookmarks</div>
       <div className="sub">Your Next Watch?</div>
+
       <div className="bookmarksContainer">{movieCards}</div>
+      <div className="recsButtonContainer">
+        <button
+          className="recsButton"
+          onClick={() => navigate("../recommendations")}
+        >
+          Find your Next Watch
+        </button>
+      </div>
     </div>
   );
 }

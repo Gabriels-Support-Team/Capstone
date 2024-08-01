@@ -16,7 +16,7 @@ function FlixterHeader({ likedMovies, watchedMovies }) {
   const { currentUser } = useAuth();
   useEffect(() => {
     if (currentUser) {
-      fetch(`http://localhost:3000/users/${currentUser.uid}`)
+      fetch(`${import.meta.env.VITE_API_URL}/users/${currentUser.uid}`)
         .then((response) => response.json())
         .then((data) => {
           setUserInfo(data);
@@ -32,6 +32,9 @@ function FlixterHeader({ likedMovies, watchedMovies }) {
         <img className="logo" src={logo} alt="" />
       </NavLink>
       <div className="links">
+        <NavLink className="navLink" to={"/home"}>
+          Home
+        </NavLink>
         <NavLink className="navLink" to={"/profile"}>
           Profile
         </NavLink>
@@ -68,7 +71,9 @@ function FlixterHeader({ likedMovies, watchedMovies }) {
         <div className="emailPopup">
           <img
             className="profileImg"
-            src={`http://localhost:3000/${userInfo?.data?.profilePic}`}
+            src={`${import.meta.env.VITE_API_URL}/${
+              userInfo?.data?.profilePic
+            }`}
             alt={`${userInfo?.data.email}`}
           />
         </div>

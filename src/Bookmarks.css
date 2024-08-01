@@ -7,3 +7,13 @@
   padding-left: 10%;
   padding-right: 10%;
 }
+.recsButtonContainer {
+  margin: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 6vh;
+}
+.recsButton {
+  height: 100%;
+}

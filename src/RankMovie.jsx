@@ -24,7 +24,9 @@ function RankMovie() {
   // Fetch user's movies excluding the new movie to be ranked
   useEffect(() => {
     if (currentUser) {
-      fetch(`http://localhost:3000/users/userMovies/${currentUser.uid}`)
+      fetch(
+        `${import.meta.env.VITE_API_URL}/users/userMovies/${currentUser.uid}`
+      )
         .then((response) => response.json())
         .then((data) => {
           const filteredMovies = data.filter(
@@ -62,7 +64,7 @@ function RankMovie() {
   // Function to update movie ratings in the backend
   function updateMovieRatings(movieId, rating) {
     const userId = currentUser.uid;
-    fetch("http://localhost:3000/users/logMovie", {
+    fetch(`${import.meta.env.VITE_API_URL}/users/logMovie`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -86,16 +88,19 @@ function RankMovie() {
       return;
     }
 
-    const response = await fetch(`http://localhost:3000/users/getUserMovie`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: currentUser.uid,
-        movieId: newMovie.movieId,
-      }),
-    });
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/users/getUserMovie`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: currentUser.uid,
+          movieId: newMovie.movieId,
+        }),
+      }
+    );
     const data = await response.json();
     setNewUserMovie(data);
 
@@ -207,6 +212,9 @@ function RankMovie() {
           </button>
           <button onClick={() => navigate("../movieLogger")}>
             Log another
+          </button>
+          <button onClick={() => navigate("../recommendations")}>
+            Get some Elite Recommendations!
           </button>
         </div>
       </div>

@@ -8,7 +8,7 @@ import { getRatingColor } from "./utils";
 import { ThreeCircles } from "react-loader-spinner";
 import { AMOUNT_RECS } from "./config";
 import CreateModal from "./Modal";
-
+import { useNavigate } from "react-router-dom";
 function Recommendations() {
   const location = useLocation();
   const { data } = location.state || { data: null };
@@ -20,10 +20,12 @@ function Recommendations() {
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
-
+  const navigate = useNavigate();
   function fetchRecommendations() {
     setLoading(true);
-    fetch(`http://localhost:3000/ml/fetchRecs?userId=${currentUser.uid}`)
+    fetch(
+      `${import.meta.env.VITE_API_URL}/ml/fetchRecs?userId=${currentUser.uid}`
+    )
       .then((response) => response.json())
       .then((data) => {
         setRecommendations(data);
@@ -32,7 +34,7 @@ function Recommendations() {
   }
   function bookmarkMovie(movieId, predictedRating) {
     const userId = currentUser.uid;
-    fetch("http://localhost:3000/users/bookmarkMovie", {
+    fetch(`${import.meta.env.VITE_API_URL}/users/bookmarkMovie`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -47,13 +49,12 @@ function Recommendations() {
         const movieCards = await Promise.all(
           recommendations.map(async (movie) => {
             const response = await fetch(
-              `http://localhost:3000/movies/${movie.itemID}`
+              `${import.meta.env.VITE_API_URL}/movies/${movie.itemID}`
             );
             if (!response.ok) {
               throw new Error("Failed to fetch movie details");
             }
             const details = await response.json();
-            console.log(details);
 
             return (
               <MovieCard
@@ -92,7 +93,9 @@ function Recommendations() {
         />
       )}
       <div className="pageContainer">
-        <h1 className="recTitle">Personalized Recommendations</h1>
+        <h1 className="personalRecs">
+          Movies Recommended Just for You, Based on Your Viewing History
+        </h1>{" "}
         <div className="buttonContain">
           <button
             onClick={() => {
@@ -103,12 +106,35 @@ function Recommendations() {
           </button>
         </div>
         {movieCards2 && !loading && (
-          <h1 className="personalRecs">
-            Movies Recommended Just for You, Based on Your Viewing History
-          </h1>
+          <div>
+            <div className="exampleRating">
+              <div
+                style={{
+                  borderColor: getRatingColor(7.9),
+                  color: getRatingColor(7.9),
+                }}
+                className="score"
+              >
+                {7.9}
+              </div>
+              = Scores reflect our prediction of your reaction to the movie.
+            </div>
+          </div>
         )}
         {!loading && (
-          <div className="recommendationsContainer">{movieCards2}</div>
+          <div>
+            <div className="recommendationsContainer">
+              {movieCards2}
+              <div className="recsButtonContainer">
+                <button
+                  className="recsButton"
+                  onClick={() => navigate("../Bookmarks")}
+                >
+                  Saved Recs
+                </button>
+              </div>
+            </div>
+          </div>
         )}
         {!loading ? (
           <></>
