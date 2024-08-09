@@ -27,7 +27,7 @@ function MovieCard({
   //toggles movie as watched
 
   useEffect(() => {
-    if (tmdbId) {
+    if (tmdbId && uniquePlatforms.size === 0) {
       const url = `https://api.watchmode.com/v1/title/movie-${tmdbId}/sources?apiKey=${apiKey}&regions=US`;
       fetch(url)
         .then((response) => response.json())
